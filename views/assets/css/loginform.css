@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap");
+
+:root {
+  --primary-color: #f1eee9;
+  --secondary-color: #f54725;
+  --tertiary-color: #f9d678;
+  --text-dark: #13313c;
+  --text-light: #475569;
+  --white: #ffffff;
+  --max-width: 1200px;
+  --header-font: "Rubik", sans-serif;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--primary-color);
+}
+
+/* Header Section */
+header {
+  background-color: #1d3a6c; /* AUF blue color */
+}
+
+header .logo {
+  height: 40px;
+}
+
+header h1 {
+  font-family: var(--header-font);
+  font-size: 1.5rem; 
+  font-weight: 500;
+  text-align: right;
+}
+
+/*------------ Login container ------------*/
+.box-area {
+  width: 930px;
+}
+
+/*------------ Right box ------------*/
+.right-box {
+  padding: 40px 30px 40px 40px;
+}
+
+/*------------ Custom Placeholder ------------*/
+::placeholder {
+  font-size: 16px;
+}
+
+.rounded-4 {
+  border-radius: 20px;
+}
+
+.rounded-5 {
+  border-radius: 30px;
+}
+
+/*------------ Input Button Hover Effect ------------*/
+input[type="text"],
+input[type="password"],
+button {
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: #1d3a6c;
+}
+
+/*------------ For small screens------------*/
+@media only screen and (max-width: 768px) {
+  .box-area {
+    margin: 0 10px;
+  }
+
+  .left-box {
+    height: 100px;
+    overflow: hidden;
+  }
+
+  .right-box {
+    padding: 20px;
+  }
+}
