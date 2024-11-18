@@ -4,7 +4,7 @@ namespace App\Models;
 
 use PDO;
 
-class User {
+class User  {
 
     private $db;
 
