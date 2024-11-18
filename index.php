@@ -41,6 +41,12 @@ try {
     //Route for My tickets
     $router->get('/mytickets', '\App\Controllers\TicketController@showMyticketsTable');
 
+    //Route for Team
+    $router->get('/team', '\App\Controllers\TeamController@showTeamTable');
+
+    //Route for Users
+    $router->get('/users', '\App\Controllers\UserController@showUserTable');
+
     // Run the router
     $router->run();
 
