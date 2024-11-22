@@ -10,26 +10,39 @@
 </head>
 <body>
 
+    <!-- 
+          What has changed? I increased the height and width of the container since I decided to add a "Go back" text button so 
+          the user can have the power to go back to the previous page
+    -->
+
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row border rounded-5 p-3 bg-white shadow box-area">
-            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #103cbe;">
+            
+            <!-- Left Box -->
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #60B0FF;">
                 <img src="views/assets/images/Login.png" class="img-fluid" style="width: 250px;">
                 <p class="text-white fs-2">Welcome back!</p>
                 <small class="text-white text-center">Please sign in to access your account.</small>
-            </div> 
+            </div>
+
+            <!-- Right Box -->
             <div class="col-md-6 right-box">
                 <div class="header-text mb-4">
+                    <!-- Go Back Link -->
+                    <a href="javascript:history.back()" class="text-danger go-back-link">← Go Back</a> <!-- ayaw ng /home kaya javascript:history.back() HAHAHAHHAHAHAHAH -->
+                    <br><br>
                     <h2>Hello, Again</h2>
                     <p>We are happy to have you back.</p>
                 </div>
+
                 <form method="POST" action="/login">
                     <div class="input-group mb-3">
                         <input type="text" name="email" class="form-control form-control-lg" placeholder="Email address" required>
                     </div>
-                    <div class="input-group mb-1">
+                    <div class="input-group mb-3">
                         <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" required>
                     </div>
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-4">
                         <button type="submit" class="btn btn-lg btn-primary w-100">Login</button>
                     </div>
                     {{#error}}

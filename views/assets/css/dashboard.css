@@ -1,3 +1,9 @@
+
+body {
+  overflow: hidden;
+}
+
+
 html, body {
   height: 100%;
   margin: 0;
@@ -41,7 +47,6 @@ html, body {
 
 .sidebar {
   width: 220px;
-  background-color: #003366;
   padding-top: 60px; /* Adjust this value to move it down more or less */
   position: fixed;
   top: 0;
@@ -52,22 +57,7 @@ html, body {
 .sidebar .nav-item {
   padding: 2px 0;
 }
-
-.sidebar .nav-link {
-  color: #004d99;
-  padding: 10px 20px;
-  font-size: 1rem;
-  display: block;
-}
-
-.sidebar .nav-link {
-  color: #000000 !important; /* Eto yung font color side */
-}
-
-.sidebar .nav-link:hover {
-  background-color: #005bb5;
-  color: #ffffff;
-}
+  
 
 #content-wrapper {
   margin-left: 220px; /* Match the sidebar width */

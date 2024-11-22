@@ -35,8 +35,14 @@ a {
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: var(--primary-color);
+  background-image: url('/views/assets/images/home-bg.png'); 
+  background-size: cover; 
+  background-position: center; 
+  min-height: 100vh;  
+  margin: 0;
+  overflow: hidden;  
 }
+
 
 nav {
   position: fixed;
@@ -236,17 +242,17 @@ header h1 {
     font-size: 1rem;
     font-weight: 600;
     white-space: nowrap;
-    color: var(--text-dark);
-    background-color: var(--tertiary-color);
-    border-radius: 5rem;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
+    color: var(--primary-color) ; 
+    background-color: var(--text-dark); 
+    border-radius: 5px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
     cursor: pointer;
   }
 
   .nav__btns .btn:hover {
-    color: var(--white);
-    background-color: var(--secondary-color);
+    color: var(--text-dark);
+    background-color: var(--tertiary-color);  
   }
 
   .header__container {
@@ -272,23 +278,24 @@ header h1 {
     display: inline-block;
     margin-top: 20px; 
     padding: 15px 30px; 
-    background-color: #e9c939; 
-    color: white; 
+    background-color: var(--tertiary-color); 
+    color: var(--text-dark); 
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     text-decoration: none; 
-    border-radius: 5px; 
+    border-radius: 50px; 
     transition: background-color 0.3s ease, transform 0.3s ease; 
   }
   
   .get-started-btn:hover {
-    background-color: #db6505; 
+    background-color: var(--text-dark); 
+    color: #f9d678  ;
     transform: translateY(-5px); 
   }
   
   .get-started-btn:active {
-    background-color: #e25707; 
+    background-color: #06161d;  
     transform: translateY(0); 
   }
   

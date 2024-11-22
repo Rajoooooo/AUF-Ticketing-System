@@ -10646,7 +10646,7 @@
   
   .sidebar {
     width: 90px !important;
-    background-color: #212529;
+    background-color: #60B0FF;
     min-height: calc(100vh - 56px);
   }
   
@@ -10680,10 +10680,6 @@
   
   .sidebar .nav-item.dropdown .dropdown-toggle::after {
     display: none;
-  }
-  
-  .sidebar .nav-item .nav-link {
-    color: rgba(255, 255, 255, 0.5);
   }
   
   .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {
