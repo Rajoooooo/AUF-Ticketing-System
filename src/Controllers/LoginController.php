@@ -30,7 +30,7 @@ class LoginController extends BaseController {
             $error = 'Please enter your password';
         } else {
             $userModel = new User($conn); // Use the global connection
-            $user = $userModel->getUserByEmail($email);
+            $user = $userModel->getUserByEmail($email); // This method is now defined
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['logged-in'] = true;

@@ -51,6 +51,8 @@ try {
     $router->get('/edit-user/{id}', '\App\Controllers\UserController@editUserForm');
     $router->post('/update-user/{id}', '\App\Controllers\UserController@updateUser');
     $router->get('/delete-user/{id}', '\App\Controllers\UserController@deleteUser');
+    
+
 
 
 

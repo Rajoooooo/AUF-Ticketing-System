@@ -32,6 +32,16 @@ class User extends BaseModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Add this method to handle login by email
+    public function getUserByEmail($email)
+    {
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function updateUser($id, $data)
     {
         $sql = "UPDATE users SET name = :name, email = :email, phone = :phone, 
@@ -49,4 +59,3 @@ class User extends BaseModel
         return $stmt->execute();
     }
 }
-
