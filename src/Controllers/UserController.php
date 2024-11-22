@@ -3,15 +3,19 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use App\Controllers\BaseController;
+use PDO;
 
 class UserController extends BaseController
 {
     private $userModel;
+    private $db;
 
-    public function __construct()
+    // Default to null or pass the connection directly if available
+    public function __construct($conn = null)
     {
-        $this->userModel = new User();
+        // If no connection is provided, use a default or throw an error
+        $this->db = $conn ?: new PDO('mysql:host=localhost;dbname=test', 'root', '');
+        $this->userModel = new User($this->db);
     }
 
     public function showUserTable()
@@ -93,3 +97,4 @@ class UserController extends BaseController
         exit();
     }
 }
+
