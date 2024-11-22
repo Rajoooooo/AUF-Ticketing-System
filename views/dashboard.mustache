@@ -72,18 +72,20 @@
                 <tbody>
                   {{#tickets}}
                   <tr>
-                    <td>{{subject}}</td>
+                    <td>{{title}}</td>
                     <td>{{requester}}</td>
                     <td>{{team}}</td>
                     <td>{{status}}</td>
                     <td>{{priority}}</td>
-                    <td>{{assignedTo}}</td>
+                    <td>{{assignedTo}}</td> 
                     <td>
-                      <a href="/ticket/{{ticketId}}" class="btn btn-outline-primary btn-sm">View</a>
+                      <a href="/ticket/{{id}}" class="btn btn-outline-primary btn-sm">View</a>
+                      <a href="/ticket/edit/{{id}}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                      <a href="/ticket/delete/{{id}}" class="btn btn-outline-danger btn-sm">Delete</a>
                     </td>
                   </tr>
                   {{/tickets}}
-                </tbody>
+                </tbody>                
               </table>
             </div>
           </div>

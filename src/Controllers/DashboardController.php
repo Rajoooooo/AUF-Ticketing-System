@@ -3,29 +3,32 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Ticket;
 
 class DashboardController extends BaseController
 {
     public function showDashboard()
     {
-        // Start the session
         session_start();
 
-        // Check if the user is logged in
+        // Ensure the user is logged in
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the data for rendering
+        // Fetch tickets from the database
+        $ticketModel = new Ticket();
+        $tickets = $ticketModel->getAllTickets(); // Retrieve all tickets
+
+        // Pass data to the view
         $template = 'dashboard';
         $data = [
-            'title' => '',
-            'user' => $_SESSION['user'] // Passing the user session data
+            'title' => 'Dashboard',
+            'user' => $_SESSION['user'],
+            'tickets' => $tickets, // Tickets data for the dashboard
         ];
 
-        // Render the dashboard view
-        $output = $this->render($template, $data);
-        return $output;
+        echo $this->render($template, $data);
     }
 }

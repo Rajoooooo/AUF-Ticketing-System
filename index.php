@@ -22,6 +22,8 @@ try {
 
     //Route for ticket form
     $router->get('/ticket-form', '\App\Controllers\TicketController@showTicketForm');
+    $router->post('/ticket-form', '\App\Controllers\TicketController@createTicket');
+    $router->get('/ticket/delete/{id}', '\App\Controllers\TicketController@deleteTicket');
 
     //Route for Open tickets
     $router->get('/open', '\App\Controllers\TicketController@showOpenTable');

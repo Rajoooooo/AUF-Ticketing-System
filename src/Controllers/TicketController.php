@@ -14,27 +14,104 @@ class TicketController extends BaseController
     public function showTicketForm()
     {
         session_start();
-        
-        // Check if the user is logged in
+
+        // Check login
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data
+        $teamModel = new Team();
+        $teams = $teamModel->getAllTeams();
+
         $template = 'ticket-form';
         $data = [
             'title' => 'Create a New Ticket',
-            'user' => $_SESSION['user'], // Passing the user session data
-            'err' => isset($_SESSION['err']) ? $_SESSION['err'] : null, // Optional error message
-            'msg' => isset($_SESSION['msg']) ? $_SESSION['msg'] : null, // Optional success message
-            'teams' => $this->getTeams() // Fetching teams data for the dropdown
+            'user' => $_SESSION['user'],
+            'teams' => $teams,
+            'err' => $_SESSION['err'] ?? null,
+            'msg' => $_SESSION['msg'] ?? null
         ];
 
-        // Render the ticket form view
         echo $this->render($template, $data);
     }
 
+    // Create a new ticket
+    public function createTicket()
+    {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $subject = $_POST['subject'];
+            $comment = $_POST['comment'];
+            $team = $_POST['team'];
+            $priority = $_POST['priority'];
+
+            $requesterModel = new Requester();
+            $ticketModel = new Ticket();
+
+            // Insert or retrieve requester
+            $requesterId = $requesterModel->findOrCreate($name, $email, $phone);
+
+            if (!$requesterId) {
+                $_SESSION['err'] = "Failed to create requester.";
+                header('Location: /ticket-form');
+                exit();
+            }
+
+            // Create ticket
+            $ticketData = [
+                'title' => $subject,
+                'body' => $comment,
+                'requester' => $requesterId,
+                'team' => $team === 'none' ? null : $team,
+                'priority' => $priority
+            ];
+
+            if ($ticketModel->createTicket($ticketData)) {
+                $_SESSION['msg'] = "Ticket successfully created.";
+            } else {
+                $_SESSION['err'] = "Failed to create ticket.";
+            }
+
+            header('Location: /dashboard');
+        }
+    }
+
+    // Show all tickets
+    public function showAllTickets()
+    {
+        session_start();
+
+        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+            header('Location: /login-form');
+            exit();
+        }
+
+        $ticketModel = new Ticket();
+        $tickets = $ticketModel->getAllTickets();
+
+        $template = 'dashboard';
+        $data = [
+            'title' => 'Dashboard',
+            'user' => $_SESSION['user'],
+            'tickets' => $tickets
+        ];
+
+        echo $this->render($template, $data);
+    }
+
+    // Delete a ticket
+    public function deleteTicket($id)
+    {
+        $ticketModel = new Ticket();
+        $ticketModel->deleteTicket($id);
+
+        header('Location: /dashboard');
+    }
     // Show all open tickets
     public function showOpenTable()
     {
