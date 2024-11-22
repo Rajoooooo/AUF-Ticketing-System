@@ -46,6 +46,14 @@ try {
 
     //Route for Users
     $router->get('/users', '\App\Controllers\UserController@showUserTable');
+    $router->get('/create-user', '\App\Controllers\UserController@showCreateUsersForm');
+    $router->post('/new-user', '\App\Controllers\UserController@storeUser');
+    $router->get('/edit-user/{id}', '\App\Controllers\UserController@editUserForm');
+    $router->post('/update-user/{id}', '\App\Controllers\UserController@updateUser');
+    $router->get('/delete-user/{id}', '\App\Controllers\UserController@deleteUser');
+
+
+
 
     // Run the router
     $router->run();
