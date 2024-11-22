@@ -47,7 +47,7 @@
         </ol>
 
         <!-- Button to Add New Team -->
-        <a class="btn btn-primary my-3" href="./team-form"><i class="fa fa-plus"></i> New Team</a>
+        <a class="btn btn-primary my-3" href="./create-team"><i class="fa fa-plus"></i> New Team</a>
         <!-- Teams Table -->
         <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 20px; max-width: 85%; margin-top: -0px;">
 
@@ -55,35 +55,34 @@
           <!-- Container for the table -->
           <div class="table-container" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: -10px; max-width: 115%; margin-top: -20px">
             <div class="table-responsive">
-              <table class="table table-bordered table-sm" id="dataTable" style="width: 100%;" cellspacing="0">
+              <table class="table table-bordered">
                 <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Created at</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <!-- Team Rows (Using Mustache Template Variables) -->
-                  {{#teams}}
-                  <tr>
-                    <td>{{name}}</td>
-                    <td>{{created_at}}</td>
-                    <td width="100px">
-                      <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Action
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                          <a class="dropdown-item" href="./add-team-member.php?team-id={{id}}">Add Member</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {{/teams}}
+                    {{#teams}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{created_at}}</td>
+                        <td>{{updated_at}}</td>
+                        <td>
+                            <form method="POST" action="/team/delete/{{id}}" style="display:inline;">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this team?');">Delete</button>
+                            </form>
+                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{id}}">Edit</button>
+                            <button class="btn btn-primary btn-sm">Assign Members</button>
+                        </td>
+                    </tr>
+                    {{/teams}}
                 </tbody>
-              </table>
+            </table>            
             </div>
           </div>
         </div>

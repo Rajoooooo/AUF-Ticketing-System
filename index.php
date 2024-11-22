@@ -43,6 +43,11 @@ try {
 
     //Route for Team
     $router->get('/team', '\App\Controllers\TeamController@showTeamTable');
+    $router->get('/create-team', '\App\Controllers\TeamController@showCreateNewTeam');
+    $router->post('/create-team', '\App\Controllers\TeamController@createTeam');
+    $router->post('/team/delete/{id}', '\App\Controllers\TeamController@deleteTeam');
+    $router->post('/team/update/{id}', '\App\Controllers\TeamController@updateTeam');
+
 
     //Route for Users
     $router->get('/users', '\App\Controllers\UserController@showUserTable');
