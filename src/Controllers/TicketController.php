@@ -24,13 +24,21 @@ class TicketController extends BaseController
         $teamModel = new Team();
         $teams = $teamModel->getAllTeams();
 
+        // Capture the session message and clear it
+        $message = $_SESSION['msg'] ?? null;
+        unset($_SESSION['msg']); // Clear the message after use
+
+        // Capture the error message and clear it
+        $error = $_SESSION['err'] ?? null;
+        unset($_SESSION['err']); // Clear the error after use
+
         $template = 'ticket-form';
         $data = [
             'title' => 'Create a New Ticket',
             'user' => $_SESSION['user'],
             'teams' => $teams,
-            'err' => $_SESSION['err'] ?? null,
-            'msg' => $_SESSION['msg'] ?? null
+            'err' => $error,
+            'msg' => $message
         ];
 
         echo $this->render($template, $data);
@@ -112,147 +120,119 @@ class TicketController extends BaseController
 
         header('Location: /dashboard');
     }
+
     // Show all open tickets
     public function showOpenTable()
     {
         session_start();
         
-        // Check if the user is logged in
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'open';
         $data = [
             'title' => 'Open Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for open tickets
         echo $this->render($template, $data);
     }
 
-    //show all solved ticket
+    // Show all solved tickets
     public function showSolvedTable()
     {
         session_start();
-        
-        // Check if the user is logged in
+
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'solved';
         $data = [
             'title' => 'Solved Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for solved tickets
         echo $this->render($template, $data);
     }
 
-    //show all closed ticket 
+    // Show all closed tickets
     public function showClosedTable()
     {
         session_start();
-        
-        // Check if the user is logged in
+
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'closed';
         $data = [
             'title' => 'Closed Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for closed tickets
         echo $this->render($template, $data);
     }
 
-    //show all pending ticket 
+    // Show all pending tickets
     public function showPendingTable()
     {
         session_start();
-        
-        // Check if the user is logged in
+
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'pending';
         $data = [
             'title' => 'Pending Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for pending tickets
         echo $this->render($template, $data);
     }
 
-    //show all unassigned ticket 
+    // Show all unassigned tickets
     public function showUnassignedTable()
     {
         session_start();
-        
-        // Check if the user is logged in
+
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'unassigned';
         $data = [
             'title' => 'Unassigned Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for unassigned tickets
         echo $this->render($template, $data);
     }
 
-
-    //show all my tickets
+    // Show all my tickets
     public function showMyticketsTable()
     {
         session_start();
-        
-        // Check if the user is logged in
+
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        // Prepare the template and data for the view
         $template = 'mytickets';
         $data = [
             'title' => 'My Tickets',
             'user' => $_SESSION['user']
         ];
 
-        // Render the ticket view for myticket tickets
         echo $this->render($template, $data);
     }
 
-
-    // Method to simulate fetching teams from the database
-    private function getTeams()
-    {
-        return [
-            ['id' => '1', 'name' => 'Support Team'],
-            ['id' => '2', 'name' => 'Development Team'],
-            ['id' => '3', 'name' => 'HR Team']
-        ];
-    }
 }
