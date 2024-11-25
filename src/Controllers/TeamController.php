@@ -125,4 +125,24 @@ class TeamController extends BaseController
             exit;
         }
     }
+
+    public function showAddTeamMemberForm()
+    {
+        session_start();
+
+        // Check if the user is logged in
+        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+            header('Location: /login-form');
+            exit();
+        }
+
+        // Render the create team view
+        $template = 'add-team-member';
+        $data = [
+            'title' => 'Add Team Member',
+            'user' => $_SESSION['user']
+        ];
+        echo $this->render($template, $data);
+    }
+
 }

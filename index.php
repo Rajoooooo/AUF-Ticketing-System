@@ -52,7 +52,8 @@ try {
     $router->get('/edit-team/{id}', '\App\Controllers\TeamController@editTeamForm');
     $router->post('/update-team/{id}', '\App\Controllers\TeamController@updateTeam');
     
-
+    //Route for adding member
+    $router->get('/add-team-member', '\App\Controllers\TeamController@showAddTeamMemberForm');
 
 
     //Route for Users
