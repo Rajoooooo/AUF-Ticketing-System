@@ -47,13 +47,16 @@
         </ol>
 
         <!-- Button to Add New Team -->
-        <a class="btn btn-primary my-3" href="./create-team"><i class="fa fa-plus"></i> New Team</a>
+        <div class="d-flex justify-content-start mb-3" style="margin-top: -5px;">
+                  <a class="btn btn-primary"  href="./create-team" style="background-color: #4080b0; border-color: #4080b0;"><i class="fa fa-plus"></i> New Ticket</a>
+        </div>
+
         <!-- Teams Table -->
         <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 20px; max-width: 85%; margin-top: -0px;">
 
         <div class="card-body">
           <!-- Container for the table -->
-          <div class="table-container" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: -10px; max-width: 115%; margin-top: -20px">
+          <div class="table-container" style="padding: 10 px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: -10px; max-width: 115%; margin-top: -20px">
             <div class="table-responsive">
               <table class="table table-bordered">
                 <thead>
@@ -66,22 +69,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#teams}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{name}}</td>
-                        <td>{{created_at}}</td>
-                        <td>{{updated_at}}</td>
-                        <td>
-                            <form method="POST" action="/team/delete/{{id}}" style="display:inline;">
-                                <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this team?');">Delete</button>
-                            </form>
-                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal{{id}}">Edit</button>
-                            <button class="btn btn-primary btn-sm">Assign Members</button>
-                        </td>
-                    </tr>
-                    {{/teams}}
-                </tbody>
+    {{#teams}}
+    <tr>
+        <td>{{id}}</td>
+        <td>{{name}}</td>
+        <td>{{created_at}}</td>
+        <td>{{updated_at}}</td>
+        <td>
+            <form method="POST" action="/team/delete/{{id}}" style="display:inline;">
+                <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this team?');">Delete</button>
+            </form>
+            <a href="/edit-team/{{id}}" class="btn btn-warning btn-sm">Edit</a>
+            <button class="btn btn-primary btn-sm" style="background-color: #4080b0; border-color: #4080b0;">Assign Members</button>
+        </td>
+    </tr>
+    {{/teams}}
+</tbody>
+
             </table>            
             </div>
           </div>

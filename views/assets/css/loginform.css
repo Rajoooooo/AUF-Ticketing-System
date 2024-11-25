@@ -13,15 +13,13 @@
 }
 
 body {
-  background-image: url('/views/assets/images/login-bg.png'); /* Relative path from the root of your server */
+  background-image: url("/views/assets/images/login-bg.png"); /* Relative path from the root of your server */
   background-size: cover; /* Ensure the background image covers the entire screen */
   background-position: center; /* Center the background */
   background-attachment: fixed; /* Make the background fixed while scrolling */
   height: 100vh;
   margin: 0;
 }
-
-
 
 /* Header Section */
 header {
@@ -34,7 +32,7 @@ header .logo {
 
 header h1 {
   font-family: var(--header-font);
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   font-weight: 500;
   text-align: right;
 }
@@ -79,26 +77,26 @@ button:hover {
 /*------------ Go Back Button Alignment ------------*/
 .go-back-link {
   font-size: 18px;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   display: inline-block;
 }
 
 /*------------ Form Input Spacing ------------*/
 input[type="text"],
 input[type="password"] {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 /*------------ Adjust Login Button Spacing ------------*/
 button[type="submit"] {
-  background-color: #60B0FF;
-  border-width: 0cap; 
-  margin-top: 15px; 
+  background-color: #60b0ff;
+  border-width: 0cap;
+  margin-top: 15px;
 }
 
 button[type="submit"]:hover {
-background-color: #346ea9;
-} 
+  background-color: #346ea9;
+}
 
 /*------------ For small screens------------*/
 @media only screen and (max-width: 768px) {

@@ -42,7 +42,10 @@
           </li>
           <li class="breadcrumb-item active">Overview</li>
         </ol>
-        <a class="btn btn-primary my-3" href="create-user"><i class="fa fa-plus"></i> Create New User</a>
+
+        <div class="d-flex justify-content-start mb-3" style="margin-top: 15px;">
+                  <a class="btn btn-primary"  href="./create-user" style="background-color: #4080b0; border-color: #4080b0;"><i class="fa fa-plus"></i> Create New User</a>
+        </div>
 
         <!-- Users Table -->
         <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 20px; max-width: 85%; margin-top: -0px;">
@@ -70,7 +73,7 @@
                       <td>{{phone}}</td>
                       <td>{{created_at}}</td>
                       <td>
-                        <a href="view-user/{{id}}" class="btn btn-sm btn-info"><i class="fa fa-eye"></i> View</a>
+                        <a href="view-user/{{id}}" class="btn btn-sm btn-info" style="background-color: #4080b0; border-color: #4080b0;"><i class="fa fa-eye"></i> View</a>
                         <a href="edit-user/{{id}}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</a>
                         <a href="delete-user/{{id}}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</a>
                       </td>

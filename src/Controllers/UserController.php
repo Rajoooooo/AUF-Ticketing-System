@@ -64,30 +64,51 @@ class UserController extends BaseController
     }
 
     public function editUserForm($id)
-    {
-        session_start();
-        $user = $this->userModel->getUserById($id);
-        $template = 'edit-user';
-        $data = ['title' => 'Edit User', 'user' => $user];
-        echo $this->render($template, $data);
+{
+    $userModel = new \App\Models\User();
+    $user = $userModel->getUserById($id);
+
+    if ($user) {
+        $this->render('edit-user', [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+        ]);
+    } else {
+        echo "User not found.";
+        exit;
+    }
+}
+
+public function updateUser($id)
+{
+    $userModel = new \App\Models\User();
+
+    // Collect form data
+    $data = [
+        'name' => $_POST['name'],
+        'email' => $_POST['email'],
+        'phone' => $_POST['phone'], // Add phone number
+    ];
+
+    // Check if a new password is provided
+    if (!empty($_POST['password'])) {
+        $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    } else {
+        // Retain the current password if no new password is provided
+        $existingUser = $userModel->getUserById($id);
+        $data['password'] = $existingUser['password'];
     }
 
-    public function updateUser($id)
-    {
-        session_start();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'name' => $_POST['name'],
-                'email' => $_POST['email'],
-                'phone' => $_POST['phone'],
-                'password' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-                'last_password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
-            ];
-            $this->userModel->updateUser($id, $data);
-            header('Location: /users');
-            exit();
-        }
-    }
+    // Update the user in the database
+    $userModel->updateUser($id, $data);
+
+    // Redirect to the Users page
+    header("Location: /users");
+    exit;
+}
+
+
 
     public function deleteUser($id)
     {
@@ -95,6 +116,23 @@ class UserController extends BaseController
         $this->userModel->deleteUser($id);
         header('Location: /users');
         exit();
+    }
+    public function viewUser($id)
+    {
+        $user = $this->userModel->getUserById($id);
+
+        if (!$user) {
+            // If no user is found, display an error message
+            die("User not found.");
+        }
+
+        // Render the view with user data
+        $this->render('view-user', [
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'phone' => $user['phone'],
+            'role' => $user['role']
+        ]);
     }
 }
 

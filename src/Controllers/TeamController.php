@@ -86,23 +86,43 @@ class TeamController extends BaseController
     }
 
     public function updateTeam($id)
+{
+    $teamModel = new \App\Models\Team();
+
+    // Get the updated name from the form
+    $name = $_POST['name'];
+
+    // Debug: Check if form data is received
+    if (!$name) {
+        die("No team name received.");
+    }
+
+    // Update the team in the database
+    $isUpdated = $teamModel->updateTeamName($id, $name);
+
+    // Debug: Check if the update was successful
+    if (!$isUpdated) {
+        die("Failed to update the team in the database.");
+    }
+
+    // Redirect back to the teams page
+    header("Location: /team");
+    exit;
+}
+
+    public function editTeamForm($id)
     {
-        session_start();
+        $teamModel = new Team();
+        $team = $teamModel->getTeamById($id);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = trim($_POST['team-name']);
-
-            if (!empty($name)) {
-                $teamModel = new Team();
-                $teamModel->updateTeam($id, $name);
-
-                $_SESSION['success'] = 'Team successfully updated.';
-            } else {
-                $_SESSION['error'] = 'Team name cannot be empty.';
-            }
-
-            header('Location: /team');
-            exit();
+        if ($team) {
+            $this->render('edit-team', [
+                'id' => $team['id'],
+                'name' => $team['name']
+            ]);
+        } else {
+            echo "Team not found.";
+            exit;
         }
     }
 }

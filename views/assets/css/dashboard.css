@@ -1,10 +1,9 @@
-
 body {
   overflow: hidden;
 }
 
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -57,7 +56,6 @@ html, body {
 .sidebar .nav-item {
   padding: 2px 0;
 }
-  
 
 #content-wrapper {
   margin-left: 220px; /* Match the sidebar width */
@@ -76,12 +74,12 @@ html, body {
   width: 5%; /* Reduce the width slightly */
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 5px 8px; /* Reduce padding */
   font-size: 0.9rem; /* Adjust font size for compactness */
   text-align: center; /* Keep text centered */
 }
-
 
 .table {
   margin-left: 0; /* Align the table to the left */
@@ -201,14 +199,14 @@ footer .copyright {
     position: relative;
     height: auto;
     padding-top: 15px;
-    
   }
 
   .navbar .navbar-brand {
     font-size: 1.2rem;
   }
 
-  .table th, .table td {
+  .table th,
+  .table td {
     white-space: nowrap; /* Prevent text from wrapping */
     padding: 8px; /* Adjust for more compact view */
     font-size: 0.9rem; /* Smaller font for more content */
@@ -227,7 +225,8 @@ footer .copyright {
     padding: 10px 20px;
   }
 
-  .table th, .table td {
+  .table th,
+  .table td {
     font-size: 0.9rem;
   }
 }
@@ -237,7 +236,7 @@ footer .copyright {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1030; 
+  z-index: 1030;
 }
 
 @media (max-width: 992px) {
@@ -263,16 +262,16 @@ footer .copyright {
   .sidebar {
     position: fixed;
     width: 100%;
-    display: none; 
-    z-index: 1040; 
+    display: none;
+    z-index: 1040;
   }
 
   .sidebar.show {
-    display: block; 
+    display: block;
   }
 
   #content-wrapper {
-    margin-top: 56px; 
-    margin-left: 0; 
+    margin-top: 56px;
+    margin-left: 0;
   }
 }

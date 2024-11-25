@@ -46,8 +46,10 @@
         </ol>
 
         <div class="d-flex justify-content-start mb-3" style="margin-top: -5px;">
-          <a class="btn btn-primary" href="/ticket-form"><i class="fa fa-plus"></i> New Ticket</a>
+          <a class="btn btn-primary" href="/ticket-form" style="background-color: #4080b0; border-color: #4080b0;"><i class="fa fa-plus"></i> New Ticket</a>
         </div>
+
+
 
       </div>
 
@@ -79,12 +81,19 @@
                     <td>{{priority}}</td>
                     <td>{{assignedTo}}</td> 
                     <td>
-                      <a href="/ticket/{{id}}" class="btn btn-outline-primary btn-sm">View</a>
-                      <a href="/ticket/edit/{{id}}" class="btn btn-outline-secondary btn-sm">Edit</a>
-                      <a href="/ticket/delete/{{id}}" class="btn btn-outline-danger btn-sm">Delete</a>
-                    </td>
+                      <div class="dropdown">
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #4080b0; border-color: #4080b0;">
+                          Actions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{id}}">
+                          <a class="dropdown-item" href="/ticket/{{id}}"><i class="fa fa-eye"></i> View</a>
+                          <a class="dropdown-item" href="/ticket/edit/{{id}}"><i class="fa fa-edit"></i> Edit</a>
+                          <a class="dropdown-item text-danger" href="/ticket/delete/{{id}}"><i class="fa fa-trash"></i> Delete</a>
+                        </div>
+                      </div>
+                    </td>                    
                   </tr>
-                  {{/tickets}}
+                  {{/tickets}}  
                 </tbody>                
               </table>
             </div>

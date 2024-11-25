@@ -29,10 +29,24 @@ class Team extends BaseModel
         $stmt->execute(['id' => $id]);
     }
 
-    public function updateTeam($id, $name)
+    public function updateTeamName($id, $name)
+{
+    $sql = "UPDATE team SET name = :name, updated_at = NOW() WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+
+    return $stmt->execute();
+}
+
+
+    public function getTeamById($id)
     {
-        $sql = "UPDATE team SET name = :name, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $sql = "SELECT * FROM team WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $id, 'name' => $name]);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

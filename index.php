@@ -49,6 +49,10 @@ try {
     $router->post('/create-team', '\App\Controllers\TeamController@createTeam');
     $router->post('/team/delete/{id}', '\App\Controllers\TeamController@deleteTeam');
     $router->post('/team/update/{id}', '\App\Controllers\TeamController@updateTeam');
+    $router->get('/edit-team/{id}', '\App\Controllers\TeamController@editTeamForm');
+    $router->post('/update-team/{id}', '\App\Controllers\TeamController@updateTeam');
+    
+
 
 
     //Route for Users
@@ -58,6 +62,12 @@ try {
     $router->get('/edit-user/{id}', '\App\Controllers\UserController@editUserForm');
     $router->post('/update-user/{id}', '\App\Controllers\UserController@updateUser');
     $router->get('/delete-user/{id}', '\App\Controllers\UserController@deleteUser');
+
+
+    // Route for viewing a single user
+    $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
+
+
     
 
 

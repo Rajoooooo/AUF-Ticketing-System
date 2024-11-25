@@ -19,7 +19,7 @@ class User extends BaseModel
         $sql = "INSERT INTO users (name, email, phone, password, last_password) 
                 VALUES (:name, :email, :phone, :password, :last_password)";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute($data);
+        $stmt->execute($data);    
         return $this->db->lastInsertId();
     }
 
@@ -43,13 +43,20 @@ class User extends BaseModel
     }
 
     public function updateUser($id, $data)
-    {
-        $sql = "UPDATE users SET name = :name, email = :email, phone = :phone, 
-                password = :password, last_password = :last_password WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute($data);
-    }
+{
+    $sql = "UPDATE users 
+            SET name = :name, email = :email, phone = :phone, password = :password 
+            WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $data['name'], PDO::PARAM_STR);
+    $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+    $stmt->bindParam(':phone', $data['phone'], PDO::PARAM_STR);
+    $stmt->bindParam(':password', $data['password'], PDO::PARAM_STR);
+
+    return $stmt->execute();
+}
+
 
     public function deleteUser($id)
     {
@@ -58,4 +65,6 @@ class User extends BaseModel
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    
 }
