@@ -32,7 +32,7 @@ CREATE TABLE ticket (
     body TEXT NOT NULL,
     requester INT NOT NULL,
     team INT,
-    team_member TEXT, -- Store as a JSON or CSV string of team member IDs
+    team_member TEXT, 
     status ENUM('open', 'in_progress', 'resolved', 'closed') DEFAULT 'open',
     priority ENUM('low', 'medium', 'high') DEFAULT 'medium',
     rating INT DEFAULT NULL,
