@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Team;
+use App\Models\User;
+use App\Models\TeamMember;
 
 class TeamController extends BaseController
 {
@@ -86,29 +88,29 @@ class TeamController extends BaseController
     }
 
     public function updateTeam($id)
-{
-    $teamModel = new \App\Models\Team();
+    {
+        $teamModel = new \App\Models\Team();
 
-    // Get the updated name from the form
-    $name = $_POST['name'];
+        // Get the updated name from the form
+        $name = $_POST['name'];
 
-    // Debug: Check if form data is received
-    if (!$name) {
-        die("No team name received.");
+        // Debug: Check if form data is received
+        if (!$name) {
+            die("No team name received.");
+        }
+
+        // Update the team in the database
+        $isUpdated = $teamModel->updateTeamName($id, $name);
+
+        // Debug: Check if the update was successful
+        if (!$isUpdated) {
+            die("Failed to update the team in the database.");
+        }
+
+        // Redirect back to the teams page
+        header("Location: /team");
+        exit;
     }
-
-    // Update the team in the database
-    $isUpdated = $teamModel->updateTeamName($id, $name);
-
-    // Debug: Check if the update was successful
-    if (!$isUpdated) {
-        die("Failed to update the team in the database.");
-    }
-
-    // Redirect back to the teams page
-    header("Location: /team");
-    exit;
-}
 
     public function editTeamForm($id)
     {
@@ -126,7 +128,7 @@ class TeamController extends BaseController
         }
     }
 
-    public function showAddTeamMemberForm()
+    public function showAddTeamMemberForm($teamId)
     {
         session_start();
 
@@ -136,13 +138,37 @@ class TeamController extends BaseController
             exit();
         }
 
-        // Render the create team view
+        $userModel = new User();
+        $users = $userModel->getAllUsers();
+
+        $teamModel = new Team();
+        $team = $teamModel->getTeamById($teamId);
+
         $template = 'add-team-member';
         $data = [
-            'title' => 'Add Team Member',
-            'user' => $_SESSION['user']
+            'title' => 'Assign Team Member',
+            'allusers' => $users,
+            'teamId' => $teamId,
+            'teamName' => $team['name']
         ];
+
         echo $this->render($template, $data);
     }
 
+    public function assignTeamMember()
+    {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $teamId = $_POST['teamId'];
+            $userId = $_POST['team-member'];
+
+            $teamMemberModel = new TeamMember();
+            $teamMemberModel->addTeamMember($userId, $teamId);
+
+            $_SESSION['success'] = 'Member successfully assigned.';
+            header('Location: /team');
+            exit();
+        }
+    }
 }

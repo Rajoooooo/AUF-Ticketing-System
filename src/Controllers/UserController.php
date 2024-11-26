@@ -120,18 +120,19 @@ public function updateUser($id)
     public function viewUser($id)
     {
         $user = $this->userModel->getUserById($id);
+        $teamMemberModel = new \App\Models\TeamMember();
+        $teams = $teamMemberModel->getTeamsByUserId($id);
 
         if (!$user) {
-            // If no user is found, display an error message
             die("User not found.");
         }
 
-        // Render the view with user data
         $this->render('view-user', [
             'name' => $user['name'],
             'email' => $user['email'],
             'phone' => $user['phone'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            'teams' => $teams
         ]);
     }
 }

@@ -16,8 +16,6 @@
   <link href="/views/assets/css/style.css" rel="stylesheet">
   <link href="/views/assets/css/navbar.css" rel="stylesheet">
   <link href="/views/assets/css/sidebar.css" rel="stylesheet">
-</head>
-
 
   <!-- jQuery and Bootstrap Bundle (JavaScript) -->
   <script src="vendor/jquery/jquery.min.js"></script>
@@ -65,12 +63,25 @@
                       <th>Role</th>
                       <td>{{role}}</td>
                     </tr>
+                    <tr>
+                      <th>Teams</th>
+                      <td>
+                        {{#teams}}
+                        <div>{{name}}</div>
+                        {{/teams}}
+                        {{^teams}}
+                        <div>No teams assigned</div>
+                        {{/teams}}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
             <div class="text-center">
-              <a href="/users" class="btn btn-secondary" style="background-color: #4080b0; border-color: #4080b0;"><i class="fa fa-arrow-left"></i> Back to Users</a>
+              <a href="/users" class="btn btn-secondary" style="background-color: #4080b0; border-color: #4080b0;">
+                <i class="fa fa-arrow-left"></i> Back to Users
+              </a>
             </div>
           </div>
         </div>
@@ -91,7 +102,7 @@
   </div>
   <!-- /#wrapper -->
 
-  <!-- Scroll to Top Button-->
+  <!-- Scroll to Top Button -->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>

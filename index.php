@@ -53,7 +53,8 @@ try {
     $router->post('/update-team/{id}', '\App\Controllers\TeamController@updateTeam');
     
     //Route for adding member
-    $router->get('/add-team-member', '\App\Controllers\TeamController@showAddTeamMemberForm');
+    $router->get('/add-team-member/{teamId}', '\App\Controllers\TeamController@showAddTeamMemberForm');
+    $router->post('/assign-team-member', '\App\Controllers\TeamController@assignTeamMember');
 
 
     //Route for Users
@@ -67,13 +68,6 @@ try {
 
     // Route for viewing a single user
     $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
-
-
-    
-
-
-
-
 
     // Run the router
     $router->run();
