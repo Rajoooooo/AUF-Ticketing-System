@@ -1,25 +1,30 @@
+// Register helpers for status and priority
+Handlebars.registerHelper("statusClass", function (status) {
+  switch (status) {
+    case "Open":
+      return "btn-primary";
+    case "Close":
+      return "btn-danger";
+    case "Solved":
+      return "btn-success";
+    case "Pending":
+      return "btn-warning";
+    case "Unassigned":
+      return "btn-secondary";
+    default:
+      return "";
+  }
+});
 
-document.addEventListener('DOMContentLoaded', function() {
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const navbarCollapse = document.querySelector('.navbar-collapse');
-  
-
-    navbarToggler.addEventListener('click', function() {
-      navbarCollapse.classList.toggle('show');
-    });
-  
-
-    window.onclick = function(event) {
-      if (!event.target.matches('.nav-link.dropdown-toggle')) {
-        var dropdowns = document.getElementsByClassName("dropdown-menu");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
-      }
-    };
-  });
-  
+Handlebars.registerHelper("priorityClass", function (priority) {
+  switch (priority) {
+    case "Low":
+      return "btn-success";
+    case "Mid":
+      return "btn-warning";
+    case "High":
+      return "btn-danger";
+    default:
+      return "";
+  }
+});
