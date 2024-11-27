@@ -125,16 +125,21 @@ class TicketController extends BaseController
     public function showOpenTable()
     {
         session_start();
-        
+
+        // Check if the user is logged in
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
         }
 
-        $template = 'open';
+        $ticketModel = new Ticket();
+        $openTickets = $ticketModel->getOpenTickets();
+
+        $template = 'open'; // Mustache template
         $data = [
             'title' => 'Open Tickets',
-            'user' => $_SESSION['user']
+            'user' => $_SESSION['user'],
+            'allTicket' => $openTickets
         ];
 
         echo $this->render($template, $data);
