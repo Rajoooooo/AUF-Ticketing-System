@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Helpdesk Dashboard">
+  <meta name="author" content="">
+
+  <title>Helpdesk - Set Ticket</title>
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <link href="views/assets/css/dashboard.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+  <link href="views/assets/css/style.css" rel="stylesheet">
+  <link href="views/assets/css/navbar.css" rel="stylesheet">
+  <link href="views/assets/css/sidebar.css" rel="stylesheet">
+
+  <script src="views/assets/js/scripts.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+</head>
+
+<body>
+  <div id="wrapper" class="d-flex flex-column min-vh-100">
+    <!-- Navigation Partial -->
+    {{> navbar}}
+
+    <!-- Sidebar Partial -->
+    {{> sidebar}}
+
+    <!-- Content Wrapper -->
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 56px); margin-top: -56px;">
+        <div class="w-100" style="max-width: 800px;">
+            <h1 class="text-center">Set Ticket Information</h1>
+            
+            {{#err}} 
+            <p class="text-danger text-center">{{err}}</p> 
+            {{/err}}
+
+            {{#msg}} 
+            <p class="text-success text-center">{{msg}}</p> 
+            {{/msg}}
+
+            <!-- Form for Assigning Team and Team Member -->
+            <form method="post">
+                <div class="form-group row">
+                    <label for="team" class="col-sm-3 col-form-label">Team</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="team-dropdown" onchange="getTeamMember(event.target.value)">
+                            <option>--select--</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="assigned" class="col-sm-3 col-form-label">Assigned</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" name="team_member" id="team-member-dropdown">
+                            <option>--select--</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" name="submit">Assign</button>
+                </div>
+            </form>
+
+            <!-- Form for Adding a Comment -->
+            <form method="POST" action="">
+                <div class="form-group row">
+                    <label for="comment" class="col-sm-3 col-form-label">Comment</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" name="body" id="comment"></textarea>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" name="comment" class="btn btn-success">Comment</button>
+                </div>
+            </form>
+
+            <!-- Form for Changing Ticket Status -->
+            <form method="POST" action="">
+                <div class="form-group row">
+                    <label for="status" class="col-sm-3 col-form-label">Change Ticket Status</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" name="status" id="status">
+                            <option>--select--</option>
+                            <option value="open">Open</option>
+                            <option value="pending">Pending</option>
+                            <option value="closed">Closed</option>
+                            <option value="solved">Solved</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" name="submit" class="btn btn-success">Change</button>
+                </div>
+            </form>
+
+        </div>
+    </div>  
+  </div>
+
+  <!-- Optional scripts -->
+  <script src="views/assets/js/custom.js"></script>
+
+</body>
+</html>

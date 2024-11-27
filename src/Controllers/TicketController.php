@@ -235,4 +235,22 @@ class TicketController extends BaseController
         echo $this->render($template, $data);
     }
 
+    public function showSetTicketForm()
+    {
+        session_start();
+
+        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+            header('Location: /login-form');
+            exit();
+        }
+
+        $template = 'set-ticket';
+        $data = [
+            'title' => 'Set Ticket Tickets',
+            'user' => $_SESSION['user']
+        ];
+
+        echo $this->render($template, $data);
+    }
+
 }

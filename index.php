@@ -25,6 +25,9 @@ try {
     $router->post('/ticket-form', '\App\Controllers\TicketController@createTicket');
     $router->get('/ticket/delete/{id}', '\App\Controllers\TicketController@deleteTicket');
 
+    //Route for set ticket form
+    $router->get('/set-ticket', '\App\Controllers\TicketController@showSetTicketForm');
+
     //Route for Open tickets
     $router->get('/open', '\App\Controllers\TicketController@showOpenTable');
 
@@ -55,7 +58,6 @@ try {
     //Route for adding member
     $router->get('/add-team-member/{teamId}', '\App\Controllers\TeamController@showAddTeamMemberForm');
     $router->post('/assign-team-member', '\App\Controllers\TeamController@assignTeamMember');
-
 
     //Route for Users
     $router->get('/users', '\App\Controllers\UserController@showUserTable');
