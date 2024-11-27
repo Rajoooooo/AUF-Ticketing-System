@@ -5,23 +5,21 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Helpdesk Dashboard">
+  <meta name="description" content="Helpdesk Edit Team">
   <meta name="author" content="">
 
-  <title>Helpdesk - Set Ticket</title>
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-  <link href="views/assets/css/dashboard.css" rel="stylesheet">
-  <link href="styles.css" rel="stylesheet">
-  <link href="views/assets/css/style.css" rel="stylesheet">
-  <link href="views/assets/css/navbar.css" rel="stylesheet">
-  <link href="views/assets/css/sidebar.css" rel="stylesheet">
+  <title>Helpdesk - Edit Team</title>
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="/views/assets/css/dashboard.css" rel="stylesheet">
+  <link href="/styles.css" rel="stylesheet">
+  <link href="/views/assets/css/style.css" rel="stylesheet">
+  <link href="/views/assets/css/navbar.css" rel="stylesheet">
+  <link href="/views/assets/css/sidebar.css" rel="stylesheet">
 
-  <script src="views/assets/js/scripts.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery and Bootstrap Bundle (JavaScript) -->
   <script src="vendor/jquery/jquery.min.js"></script>
-
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -85,24 +83,22 @@
             </form>
 
             <!-- Form for Changing Ticket Status -->
-            <form method="POST" action="">
+            <form method="POST" action="/set-ticket/{{ticket.id}}">
                 <div class="form-group row">
                     <label for="status" class="col-sm-3 col-form-label">Change Ticket Status</label>
                     <div class="col-sm-8">
                         <select class="form-control" name="status" id="status">
-                            <option>--select--</option>
-                            <option value="open">Open</option>
-                            <option value="pending">Pending</option>
-                            <option value="closed">Closed</option>
-                            <option value="solved">Solved</option>
+                            <option value="open" {{#ticket.status_open}}selected{{/ticket.status_open}}>Open</option>
+                            <option value="pending" {{#ticket.status_pending}}selected{{/ticket.status_pending}}>Pending</option>
+                            <option value="solved" {{#ticket.status_solved}}selected{{/ticket.status_solved}}>Solved</option>
+                            <option value="closed" {{#ticket.status_closed}}selected{{/ticket.status_closed}}>Closed</option>
                         </select>
                     </div>
                 </div>
-                
                 <div class="text-center">
                     <button type="submit" name="submit" class="btn btn-success">Change</button>
                 </div>
-            </form>
+            </form>            
 
         </div>
     </div>  

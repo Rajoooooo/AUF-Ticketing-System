@@ -235,7 +235,8 @@ class TicketController extends BaseController
         echo $this->render($template, $data);
     }
 
-    public function showSetTicketForm()
+    // Show the form to change ticket status
+    public function showSetTicketForm($id)
     {
         session_start();
 
@@ -244,13 +245,53 @@ class TicketController extends BaseController
             exit();
         }
 
+        $ticketModel = new Ticket();
+        $ticket = $ticketModel->getTicketById($id);
+
+        if (!$ticket) {
+            $_SESSION['err'] = 'Ticket not found.';
+            header('Location: /dashboard');
+            exit();
+        }
+
         $template = 'set-ticket';
         $data = [
-            'title' => 'Set Ticket Tickets',
+            'title' => 'Change Ticket Status',
+            'ticket' => [
+                'id' => $ticket['id'],
+                'status_open' => $ticket['status'] === 'open',
+                'status_pending' => $ticket['status'] === 'pending',
+                'status_solved' => $ticket['status'] === 'solved',
+                'status_closed' => $ticket['status'] === 'closed'
+            ],
             'user' => $_SESSION['user']
         ];
 
         echo $this->render($template, $data);
     }
 
+    // Update ticket status
+    public function updateTicketStatus($id)
+    {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newStatus = $_POST['status'];
+
+            if (!in_array($newStatus, ['open', 'pending', 'solved', 'closed'])) {
+                $_SESSION['err'] = 'Invalid status selected.';
+                header("Location: /set-ticket/{$id}");
+                exit();
+            }
+
+            $ticketModel = new Ticket();
+            if ($ticketModel->updateStatus($id, $newStatus)) {
+                $_SESSION['msg'] = 'Ticket status updated successfully.';
+            } else {
+                $_SESSION['err'] = 'Failed to update ticket status.';
+            }
+
+            header('Location: /dashboard');
+        }
+    }
 }

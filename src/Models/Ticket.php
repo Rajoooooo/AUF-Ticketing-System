@@ -41,4 +41,20 @@ class Ticket extends BaseModel
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+
+    public function getTicketById($id)
+    {
+        $sql = "SELECT * FROM ticket WHERE id = :id AND deleted_at IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $sql = "UPDATE ticket SET status = :status, updated_at = NOW() WHERE id = :id AND deleted_at IS NULL";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':status' => $status, ':id' => $id]);
+    }
+
 }
