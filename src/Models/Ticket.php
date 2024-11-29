@@ -24,13 +24,30 @@ class Ticket extends BaseModel
 
     public function getAllTickets()
     {
-        $sql = "SELECT t.id, t.title, t.status, t.priority, t.created_at, 
-                       r.name AS requester, tm.name AS team
-                FROM ticket t
-                LEFT JOIN requester r ON t.requester = r.id
-                LEFT JOIN team tm ON t.team = tm.id
-                WHERE t.deleted_at IS NULL
-                ORDER BY t.created_at DESC";
+        $sql = "
+            SELECT 
+                t.id, 
+                t.title, 
+                t.status, 
+                t.priority, 
+                t.created_at, 
+                r.name AS requester, 
+                tm.name AS team, 
+                u.name AS team_member
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                users u ON t.team_member = u.id
+            WHERE 
+                t.deleted_at IS NULL
+            ORDER BY 
+                t.created_at DESC
+        ";
+
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -193,17 +210,24 @@ class Ticket extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function assignTeamAndMember($ticketId, $teamId, $teamMember)
+    public function assignTeamAndMember($ticketId, $teamId, $teamMemberId)
     {
         $sql = "UPDATE ticket 
                 SET team = :team, team_member = :teamMember, updated_at = NOW() 
                 WHERE id = :ticketId";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            'team' => $teamId,
-            'teamMember' => $teamMember,
-            'ticketId' => $ticketId
+        $result = $stmt->execute([
+            ':team' => $teamId,
+            ':teamMember' => $teamMemberId,
+            ':ticketId' => $ticketId
         ]);
+
+        if (!$result) {
+            error_log("Error in assignTeamAndMember: " . implode(", ", $stmt->errorInfo()));
+        }
+
+        return $result;
     }
+
 
 }
