@@ -287,15 +287,22 @@ class TicketController extends BaseController
         session_start();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $team = $_POST['team'];
-            $teamMember = $_POST['team_member'];
+            $newStatus = $_POST['status'];
+
+            if (!in_array($newStatus, ['open', 'pending', 'solved', 'closed'])) {
+                $_SESSION['err'] = 'Invalid status selected.';
+                header("Location: /set-ticket/{$id}");
+                exit();
+            }
 
             $ticketModel = new Ticket();
-            $ticketModel->assignTeamAndMember($id, $team, $teamMember);
+            if ($ticketModel->updateStatus($id, $newStatus)) {
+                $_SESSION['msg'] = 'Ticket status updated successfully.';
+            } else {
+                $_SESSION['err'] = 'Failed to update ticket status.';
+            }
 
-            $_SESSION['success'] = 'Ticket successfully updated.';
-            header("Location: /dashboard");
-            exit();
+            header('Location: /dashboard');
         }
     }
 

@@ -76,36 +76,37 @@ class Ticket extends BaseModel
         return $stmt->execute([':status' => $status, ':id' => $id]);
     }
 
-        public function getOpenTickets()
+    public function getOpenTickets()
     {
         $query = "
             SELECT 
-        t.id AS ticket_id,
-        t.title,
-        t.status, -- Include the status field
-        t.priority,
-        r.name AS requester_name,
-        tm.name AS team_name,
-        u.name AS team_member_name
-    FROM 
-        ticket t
-    LEFT JOIN 
-        requester r ON t.requester = r.id
-    LEFT JOIN 
-        team tm ON t.team = tm.id
-    LEFT JOIN 
-        team_member tmm ON t.team_member = tmm.id
-    LEFT JOIN 
-        users u ON tmm.user = u.id
-    WHERE 
-        t.status = 'open'
+                t.id AS ticket_id,
+                t.title,
+                t.status,
+                t.priority,
+                r.name AS requester_name,
+                tm.name AS team_name,
+                u.name AS team_member
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                users u ON t.team_member = u.id
+            WHERE 
+                t.status = 'open'
+            ORDER BY 
+                t.created_at DESC
         ";
-
+    
         $stmt = $this->db->prepare($query);
         $stmt->execute();
-
+    
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function getPendingTickets()
     {
