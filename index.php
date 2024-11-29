@@ -72,6 +72,7 @@ try {
 
     // Route for viewing a single user
     $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
+    
 
     // Run the router
     $router->run();

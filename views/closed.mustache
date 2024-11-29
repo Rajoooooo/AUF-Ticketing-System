@@ -39,14 +39,14 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="flex-grow-1">
             <div class="container-fluid d-flex flex-column">
-                <ol class="breadcrumb" style="margin-left: 0; padding-left: 15px; max-width: 89%;">
+                <ol class="breadcrumb" style="margin-left: 0; padding-left: 15px; max-width: 85.5%;">
                     <li class="breadcrumb-item">
                         <a href="/dashboard">Dashboard</a>
                         <span style="margin-left: 5px;">/ Closed</span>
                     </li>
                 </ol>
 
-                <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 20px; max-width: 85%; margin-top: -0px;">
+                <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 5px; max-width: 85%; margin-top: -0px;">
 
         <div class="card-body">
           <!-- Container for the table -->
@@ -65,17 +65,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{#allTicket}}
-                                    <tr>
-                                        <td><a href="/ticket-details.php?id={{id}}">{{title}}</a></td>
-                                        <td>{{requester.name}}</td>
-                                        <td>{{#team}}{{name}}{{/team}}</td>
-                                        <td><button class="btn btn-danger">{{status}}</button></td>
-                                        <td>{{priority}}</td>
-                                        <td>{{#team_member}}{{name}}{{/team_member}}</td>
-                                        <td><a href="/ticket-details.php?id={{id}}" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    </tr>
-                                    {{/allTicket}}
+                                  {{#allTicket}}
+                                  <tr>
+                                    <td><a href="/ticket-details?id={{ticket_id}}">{{title}}</a></td>
+                                    <td>{{requester_name}}</td>
+                                    <td>{{team_name}}</td>
+                                    <td><button class="btn btn-danger">{{status}}</button></td>
+                                    <td>{{priority}}</td>
+                                    <td>{{team_member_name}}</td>
+                                    <td>
+                                      <a href="/ticket-details?id={{ticket_id}}" class="btn btn-outline-primary btn-sm">View</a>
+                                      <a href="/set-ticket/{{ticket_id}}" class="btn btn-outline-secondary btn-sm">Set Ticket</a>
+                                    </td>
+                                  </tr>
+                                  {{/allTicket}}
                                 </tbody>
                             </table>
                         </div>

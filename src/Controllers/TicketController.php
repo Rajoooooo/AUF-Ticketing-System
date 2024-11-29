@@ -147,43 +147,56 @@ class TicketController extends BaseController
 
     // Show all solved tickets
     public function showSolvedTable()
-    {
-        session_start();
+{
+    session_start();
 
-        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-            header('Location: /login-form');
-            exit();
-        }
-
-        $template = 'solved';
-        $data = [
-            'title' => 'Solved Tickets',
-            'user' => $_SESSION['user']
-        ];
-
-        echo $this->render($template, $data);
+    // Check if the user is logged in
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
     }
+
+    $ticketModel = new Ticket();
+    $solvedTickets = $ticketModel->getSolvedTickets();
+
+    $template = 'solved';
+    $data = [
+        'title' => 'Solved Tickets',
+        'user' => $_SESSION['user'],
+        'allTicket' => $solvedTickets
+    ];
+
+    echo $this->render($template, $data);
+}
+
 
     // Show all closed tickets
     public function showClosedTable()
-    {
-        session_start();
+{
+    session_start();
 
-        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-            header('Location: /login-form');
-            exit();
-        }
-
-        $template = 'closed';
-        $data = [
-            'title' => 'Closed Tickets',
-            'user' => $_SESSION['user']
-        ];
-
-        echo $this->render($template, $data);
+    // Check if the user is logged in
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
     }
 
+    $ticketModel = new Ticket();
+    $closedTickets = $ticketModel->getClosedTickets();
+
+    $template = 'closed';
+    $data = [
+        'title' => 'Closed Tickets',
+        'user' => $_SESSION['user'],
+        'allTicket' => $closedTickets
+    ];
+
+    echo $this->render($template, $data);
+}
+
+
     // Show all pending tickets
+    
     public function showPendingTable()
     {
         session_start();
@@ -193,15 +206,21 @@ class TicketController extends BaseController
             exit();
         }
 
+        $ticketModel = new Ticket();
+        $pendingTickets = $ticketModel->getPendingTickets(); // Fetch tickets with "Pending" status
+
         $template = 'pending';
         $data = [
             'title' => 'Pending Tickets',
-            'user' => $_SESSION['user']
+            'user' => $_SESSION['user'],
+            'allTicket' => $pendingTickets // Pass data to the Mustache template
         ];
 
         echo $this->render($template, $data);
     }
 
+    
+    
     // Show all unassigned tickets
     public function showUnassignedTable()
     {
@@ -299,4 +318,6 @@ class TicketController extends BaseController
             header('Location: /dashboard');
         }
     }
+
+    
 }
