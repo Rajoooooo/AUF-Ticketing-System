@@ -267,27 +267,44 @@ class TicketController extends BaseController
         $teamMemberModel = new TeamMember();
 
         $ticket = $ticketModel->getTicketById($id);
+
+        if (!$ticket) {
+            $_SESSION['err'] = 'Ticket not found.';
+            header('Location: /dashboard');
+            exit();
+        }
+
         $teams = $teamModel->getAllTeams();
-        $teamMembers = $teamMemberModel->getMembersByTeamId($ticket['team']);
+        $teamMembers = !empty($ticket['team']) ? $teamMemberModel->getMembersByTeamId($ticket['team']) : [];
 
         $template = 'set-ticket';
         $data = [
             'title' => 'Set Ticket',
-            'ticket' => $ticket,
+            'ticket' => [
+                'id' => $ticket['id'],
+                'status' => [
+                    'open' => $ticket['status'] === 'open',
+                    'pending' => $ticket['status'] === 'pending',
+                    'solved' => $ticket['status'] === 'solved',
+                    'closed' => $ticket['status'] === 'closed',
+                ],
+            ],
             'teams' => $teams,
-            'teamMembers' => $teamMembers
+            'teamMembers' => $teamMembers,
+            'user' => $_SESSION['user']
         ];
 
         echo $this->render($template, $data);
     }
 
-    // Update ticket status
     public function updateTicketStatus($id)
     {
         session_start();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newStatus = $_POST['status'];
+            $team = $_POST['team'] ?? null;
+            $teamMember = $_POST['team_member'] ?? null;
 
             if (!in_array($newStatus, ['open', 'pending', 'solved', 'closed'])) {
                 $_SESSION['err'] = 'Invalid status selected.';
@@ -296,21 +313,30 @@ class TicketController extends BaseController
             }
 
             $ticketModel = new Ticket();
-            if ($ticketModel->updateStatus($id, $newStatus)) {
+
+            // Update status
+            $statusUpdated = $ticketModel->updateStatus($id, $newStatus);
+
+            // Optionally assign team and member if provided
+            if ($team || $teamMember) {
+                $ticketModel->assignTeamAndMember($id, $team, $teamMember);
+            }
+
+            if ($statusUpdated) {
                 $_SESSION['msg'] = 'Ticket status updated successfully.';
             } else {
                 $_SESSION['err'] = 'Failed to update ticket status.';
             }
 
             header('Location: /dashboard');
+            exit();
         }
     }
-
-    // Fetch team members by team ID
     public function fetchTeamMembers($teamId)
     {
         $teamMemberModel = new TeamMember();
         $members = $teamMemberModel->getMembersByTeamId($teamId);
         echo json_encode($members);
     }
+
 }

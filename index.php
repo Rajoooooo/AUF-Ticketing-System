@@ -25,9 +25,15 @@ try {
     $router->post('/ticket-form', '\App\Controllers\TicketController@createTicket');
     $router->get('/ticket/delete/{id}', '\App\Controllers\TicketController@deleteTicket');
 
-    //Route for set ticket form
+    // //Route for set ticket form
+    // $router->get('/set-ticket/{id}', '\App\Controllers\TicketController@showSetTicketForm');
+    // $router->post('/set-ticket/{id}', '\App\Controllers\TicketController@updateTicketStatus');
+
+    $router->get('/fetch-team-members/{teamId}', '\App\Controllers\TicketController@fetchTeamMembers');
     $router->get('/set-ticket/{id}', '\App\Controllers\TicketController@showSetTicketForm');
     $router->post('/set-ticket/{id}', '\App\Controllers\TicketController@updateTicketStatus');
+
+
 
 
     //Route for Open tickets
@@ -73,7 +79,7 @@ try {
     // Route for viewing a single user
     $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
 
-    $router->get('/fetch-team-members/{teamId}', '\App\Controllers\TicketController@fetchTeamMembers');
+    // $router->get('/fetch-team-members/{teamId}', '\App\Controllers\TicketController@fetchTeamMembers');
 
     
 

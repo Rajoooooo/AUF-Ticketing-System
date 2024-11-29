@@ -69,12 +69,20 @@ class Ticket extends BaseModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // public function updateStatus($id, $status)
+    // {
+    //     $sql = "UPDATE ticket SET status = :status, updated_at = NOW() WHERE id = :id AND deleted_at IS NULL";
+    //     $stmt = $this->db->prepare($sql);
+    //     return $stmt->execute([':status' => $status, ':id' => $id]);
+    // }
+
     public function updateStatus($id, $status)
-    {
-        $sql = "UPDATE ticket SET status = :status, updated_at = NOW() WHERE id = :id AND deleted_at IS NULL";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':status' => $status, ':id' => $id]);
-    }
+{
+    $sql = "UPDATE ticket SET status = :status, updated_at = NOW() WHERE id = :id AND deleted_at IS NULL";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([':status' => $status, ':id' => $id]);
+}
+
 
     public function getOpenTickets()
     {
@@ -114,12 +122,11 @@ class Ticket extends BaseModel
             SELECT 
                 t.id AS ticket_id,
                 t.title,
-                t.body,
                 t.status,
                 t.priority,
                 r.name AS requester_name,
                 tm.name AS team_name,
-                u.name AS team_member_name
+                u.name AS team_member
             FROM 
                 ticket t
             LEFT JOIN 
@@ -127,11 +134,11 @@ class Ticket extends BaseModel
             LEFT JOIN 
                 team tm ON t.team = tm.id
             LEFT JOIN 
-                team_member tmm ON t.team_member = tmm.id
-            LEFT JOIN 
-                users u ON tmm.user = u.id
+                users u ON t.team_member = u.id
             WHERE 
                 t.status = 'pending'
+            ORDER BY 
+                t.created_at DESC
         ";
 
         $stmt = $this->db->prepare($query);
@@ -150,7 +157,7 @@ class Ticket extends BaseModel
                 t.priority,
                 r.name AS requester_name,
                 tm.name AS team_name,
-                u.name AS team_member_name
+                u.name AS team_member
             FROM 
                 ticket t
             LEFT JOIN 
@@ -158,16 +165,16 @@ class Ticket extends BaseModel
             LEFT JOIN 
                 team tm ON t.team = tm.id
             LEFT JOIN 
-                team_member tmm ON t.team_member = tmm.id
-            LEFT JOIN 
-                users u ON tmm.user = u.id
+                users u ON t.team_member = u.id
             WHERE 
                 t.status = 'solved'
+            ORDER BY 
+                t.created_at DESC
         ";
-
+    
         $stmt = $this->db->prepare($query);
         $stmt->execute();
-
+    
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -181,7 +188,7 @@ class Ticket extends BaseModel
                 t.priority,
                 r.name AS requester_name,
                 tm.name AS team_name,
-                u.name AS team_member_name
+                u.name AS team_member
             FROM 
                 ticket t
             LEFT JOIN 
@@ -189,11 +196,11 @@ class Ticket extends BaseModel
             LEFT JOIN 
                 team tm ON t.team = tm.id
             LEFT JOIN 
-                team_member tmm ON t.team_member = tmm.id
-            LEFT JOIN 
-                users u ON tmm.user = u.id
+                users u ON t.team_member = u.id
             WHERE 
                 t.status = 'closed'
+            ORDER BY 
+                t.created_at DESC
         ";
 
         $stmt = $this->db->prepare($query);
@@ -215,20 +222,13 @@ class Ticket extends BaseModel
     {
         $sql = "UPDATE ticket 
                 SET team = :team, team_member = :teamMember, updated_at = NOW() 
-                WHERE id = :ticketId";
+                WHERE id = :ticketId AND deleted_at IS NULL";
         $stmt = $this->db->prepare($sql);
-        $result = $stmt->execute([
+        return $stmt->execute([
             ':team' => $teamId,
             ':teamMember' => $teamMemberId,
             ':ticketId' => $ticketId
         ]);
-
-        if (!$result) {
-            error_log("Error in assignTeamAndMember: " . implode(", ", $stmt->errorInfo()));
-        }
-
-        return $result;
     }
-
 
 }
