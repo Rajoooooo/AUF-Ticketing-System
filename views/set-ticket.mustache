@@ -44,12 +44,15 @@
             {{/msg}}
 
             <!-- Form for Assigning Team and Team Member -->
-            <form method="post">
+            <form method="post" id="set-ticket-form">
                 <div class="form-group row">
                     <label for="team" class="col-sm-3 col-form-label">Team</label>
                     <div class="col-sm-8">
-                        <select class="form-control" id="team-dropdown" onchange="getTeamMember(event.target.value)">
-                            <option>--select--</option>
+                        <select class="form-control" name="team" id="team-dropdown" onchange="getTeamMembers(this.value)">
+                            <option value="">--select--</option>
+                            {{#teams}}
+                            <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{name}}</option>
+                            {{/teams}}
                         </select>
                     </div>
                 </div>
@@ -58,15 +61,37 @@
                     <label for="assigned" class="col-sm-3 col-form-label">Assigned</label>
                     <div class="col-sm-8">
                         <select class="form-control" name="team_member" id="team-member-dropdown">
-                            <option>--select--</option>
+                            <option value="">--select--</option>
+                            {{#teamMembers}}
+                            <option value="{{id}}" {{#isAssigned}}selected{{/isAssigned}}>{{name}}</option>
+                            {{/teamMembers}}
                         </select>
                     </div>
                 </div>
-
+            
                 <div class="text-center">
                     <button class="btn btn-primary" type="submit" name="submit">Assign</button>
                 </div>
             </form>
+            
+            <script>
+                function getTeamMembers(teamId) {
+                    if (!teamId) {
+                        document.getElementById("team-member-dropdown").innerHTML = '<option>--select--</option>';
+                        return;
+                    }
+                    fetch(`/fetch-team-members/${teamId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const dropdown = document.getElementById("team-member-dropdown");
+                            dropdown.innerHTML = '<option>--select--</option>';
+                            data.forEach(member => {
+                                dropdown.innerHTML += `<option value="${member.id}">${member.name}</option>`;
+                            });
+                        });
+                }
+            </script>
+            
 
             <!-- Form for Adding a Comment -->
             <form method="POST" action="">

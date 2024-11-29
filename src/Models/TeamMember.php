@@ -24,4 +24,17 @@ class TeamMember extends BaseModel
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getMembersByTeamId($teamId)
+    {
+        $sql = "SELECT u.id, u.name 
+                FROM team_member tm
+                JOIN users u ON tm.user = u.id
+                WHERE tm.team = :teamId";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['teamId' => $teamId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

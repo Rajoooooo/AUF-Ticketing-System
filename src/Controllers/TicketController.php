@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\Ticket;
 use App\Models\Requester;
 use App\Models\Team;
+use App\Models\TeamMember;
 use App\Models\User;
 
 class TicketController extends BaseController
@@ -126,7 +127,6 @@ class TicketController extends BaseController
     {
         session_start();
 
-        // Check if the user is logged in
         if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
             header('Location: /login-form');
             exit();
@@ -135,7 +135,7 @@ class TicketController extends BaseController
         $ticketModel = new Ticket();
         $openTickets = $ticketModel->getOpenTickets();
 
-        $template = 'open'; // Mustache template
+        $template = 'open';
         $data = [
             'title' => 'Open Tickets',
             'user' => $_SESSION['user'],
@@ -147,56 +147,51 @@ class TicketController extends BaseController
 
     // Show all solved tickets
     public function showSolvedTable()
-{
-    session_start();
+    {
+        session_start();
 
-    // Check if the user is logged in
-    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-        header('Location: /login-form');
-        exit();
+        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+            header('Location: /login-form');
+            exit();
+        }
+
+        $ticketModel = new Ticket();
+        $solvedTickets = $ticketModel->getSolvedTickets();
+
+        $template = 'solved';
+        $data = [
+            'title' => 'Solved Tickets',
+            'user' => $_SESSION['user'],
+            'allTicket' => $solvedTickets
+        ];
+
+        echo $this->render($template, $data);
     }
-
-    $ticketModel = new Ticket();
-    $solvedTickets = $ticketModel->getSolvedTickets();
-
-    $template = 'solved';
-    $data = [
-        'title' => 'Solved Tickets',
-        'user' => $_SESSION['user'],
-        'allTicket' => $solvedTickets
-    ];
-
-    echo $this->render($template, $data);
-}
-
 
     // Show all closed tickets
     public function showClosedTable()
-{
-    session_start();
+    {
+        session_start();
 
-    // Check if the user is logged in
-    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-        header('Location: /login-form');
-        exit();
+        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+            header('Location: /login-form');
+            exit();
+        }
+
+        $ticketModel = new Ticket();
+        $closedTickets = $ticketModel->getClosedTickets();
+
+        $template = 'closed';
+        $data = [
+            'title' => 'Closed Tickets',
+            'user' => $_SESSION['user'],
+            'allTicket' => $closedTickets
+        ];
+
+        echo $this->render($template, $data);
     }
 
-    $ticketModel = new Ticket();
-    $closedTickets = $ticketModel->getClosedTickets();
-
-    $template = 'closed';
-    $data = [
-        'title' => 'Closed Tickets',
-        'user' => $_SESSION['user'],
-        'allTicket' => $closedTickets
-    ];
-
-    echo $this->render($template, $data);
-}
-
-
     // Show all pending tickets
-    
     public function showPendingTable()
     {
         session_start();
@@ -207,20 +202,18 @@ class TicketController extends BaseController
         }
 
         $ticketModel = new Ticket();
-        $pendingTickets = $ticketModel->getPendingTickets(); // Fetch tickets with "Pending" status
+        $pendingTickets = $ticketModel->getPendingTickets();
 
         $template = 'pending';
         $data = [
             'title' => 'Pending Tickets',
             'user' => $_SESSION['user'],
-            'allTicket' => $pendingTickets // Pass data to the Mustache template
+            'allTicket' => $pendingTickets
         ];
 
         echo $this->render($template, $data);
     }
 
-    
-    
     // Show all unassigned tickets
     public function showUnassignedTable()
     {
@@ -259,7 +252,7 @@ class TicketController extends BaseController
         echo $this->render($template, $data);
     }
 
-    // Show the form to change ticket status
+    // Show the form to set ticket
     public function showSetTicketForm($id)
     {
         session_start();
@@ -270,25 +263,19 @@ class TicketController extends BaseController
         }
 
         $ticketModel = new Ticket();
-        $ticket = $ticketModel->getTicketById($id);
+        $teamModel = new Team();
+        $teamMemberModel = new TeamMember();
 
-        if (!$ticket) {
-            $_SESSION['err'] = 'Ticket not found.';
-            header('Location: /dashboard');
-            exit();
-        }
+        $ticket = $ticketModel->getTicketById($id);
+        $teams = $teamModel->getAllTeams();
+        $teamMembers = $teamMemberModel->getMembersByTeamId($ticket['team']);
 
         $template = 'set-ticket';
         $data = [
-            'title' => 'Change Ticket Status',
-            'ticket' => [
-                'id' => $ticket['id'],
-                'status_open' => $ticket['status'] === 'open',
-                'status_pending' => $ticket['status'] === 'pending',
-                'status_solved' => $ticket['status'] === 'solved',
-                'status_closed' => $ticket['status'] === 'closed'
-            ],
-            'user' => $_SESSION['user']
+            'title' => 'Set Ticket',
+            'ticket' => $ticket,
+            'teams' => $teams,
+            'teamMembers' => $teamMembers
         ];
 
         echo $this->render($template, $data);
@@ -300,24 +287,23 @@ class TicketController extends BaseController
         session_start();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $newStatus = $_POST['status'];
-
-            if (!in_array($newStatus, ['open', 'pending', 'solved', 'closed'])) {
-                $_SESSION['err'] = 'Invalid status selected.';
-                header("Location: /set-ticket/{$id}");
-                exit();
-            }
+            $team = $_POST['team'];
+            $teamMember = $_POST['team_member'];
 
             $ticketModel = new Ticket();
-            if ($ticketModel->updateStatus($id, $newStatus)) {
-                $_SESSION['msg'] = 'Ticket status updated successfully.';
-            } else {
-                $_SESSION['err'] = 'Failed to update ticket status.';
-            }
+            $ticketModel->assignTeamAndMember($id, $team, $teamMember);
 
-            header('Location: /dashboard');
+            $_SESSION['success'] = 'Ticket successfully updated.';
+            header("Location: /dashboard");
+            exit();
         }
     }
 
-    
+    // Fetch team members by team ID
+    public function fetchTeamMembers($teamId)
+    {
+        $teamMemberModel = new TeamMember();
+        $members = $teamMemberModel->getMembersByTeamId($teamId);
+        echo json_encode($members);
+    }
 }

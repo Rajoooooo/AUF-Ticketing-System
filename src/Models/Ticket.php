@@ -59,144 +59,151 @@ class Ticket extends BaseModel
         return $stmt->execute([':status' => $status, ':id' => $id]);
     }
 
-    public function getOpenTickets()
-{
-    $query = "
-        SELECT 
-    t.id AS ticket_id,
-    t.title,
-    t.status, -- Include the status field
-    t.priority,
-    r.name AS requester_name,
-    tm.name AS team_name,
-    u.name AS team_member_name
-FROM 
-    ticket t
-LEFT JOIN 
-    requester r ON t.requester = r.id
-LEFT JOIN 
-    team tm ON t.team = tm.id
-LEFT JOIN 
-    team_member tmm ON t.team_member = tmm.id
-LEFT JOIN 
-    users u ON tmm.user = u.id
-WHERE 
-    t.status = 'open'
-    ";
+        public function getOpenTickets()
+    {
+        $query = "
+            SELECT 
+        t.id AS ticket_id,
+        t.title,
+        t.status, -- Include the status field
+        t.priority,
+        r.name AS requester_name,
+        tm.name AS team_name,
+        u.name AS team_member_name
+    FROM 
+        ticket t
+    LEFT JOIN 
+        requester r ON t.requester = r.id
+    LEFT JOIN 
+        team tm ON t.team = tm.id
+    LEFT JOIN 
+        team_member tmm ON t.team_member = tmm.id
+    LEFT JOIN 
+        users u ON tmm.user = u.id
+    WHERE 
+        t.status = 'open'
+        ";
 
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function getPendingTickets()
-{
-    $query = "
-        SELECT 
-            t.id AS ticket_id,
-            t.title,
-            t.body,
-            t.status,
-            t.priority,
-            r.name AS requester_name,
-            tm.name AS team_name,
-            u.name AS team_member_name
-        FROM 
-            ticket t
-        LEFT JOIN 
-            requester r ON t.requester = r.id
-        LEFT JOIN 
-            team tm ON t.team = tm.id
-        LEFT JOIN 
-            team_member tmm ON t.team_member = tmm.id
-        LEFT JOIN 
-            users u ON tmm.user = u.id
-        WHERE 
-            t.status = 'pending'
-    ";
+    public function getPendingTickets()
+    {
+        $query = "
+            SELECT 
+                t.id AS ticket_id,
+                t.title,
+                t.body,
+                t.status,
+                t.priority,
+                r.name AS requester_name,
+                tm.name AS team_name,
+                u.name AS team_member_name
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                team_member tmm ON t.team_member = tmm.id
+            LEFT JOIN 
+                users u ON tmm.user = u.id
+            WHERE 
+                t.status = 'pending'
+        ";
 
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function getSolvedTickets()
-{
-    $query = "
-        SELECT 
-            t.id AS ticket_id,
-            t.title,
-            t.status,
-            t.priority,
-            r.name AS requester_name,
-            tm.name AS team_name,
-            u.name AS team_member_name
-        FROM 
-            ticket t
-        LEFT JOIN 
-            requester r ON t.requester = r.id
-        LEFT JOIN 
-            team tm ON t.team = tm.id
-        LEFT JOIN 
-            team_member tmm ON t.team_member = tmm.id
-        LEFT JOIN 
-            users u ON tmm.user = u.id
-        WHERE 
-            t.status = 'solved'
-    ";
+    public function getSolvedTickets()
+    {
+        $query = "
+            SELECT 
+                t.id AS ticket_id,
+                t.title,
+                t.status,
+                t.priority,
+                r.name AS requester_name,
+                tm.name AS team_name,
+                u.name AS team_member_name
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                team_member tmm ON t.team_member = tmm.id
+            LEFT JOIN 
+                users u ON tmm.user = u.id
+            WHERE 
+                t.status = 'solved'
+        ";
 
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function getClosedTickets()
-{
-    $query = "
-        SELECT 
-            t.id AS ticket_id,
-            t.title,
-            t.status,
-            t.priority,
-            r.name AS requester_name,
-            tm.name AS team_name,
-            u.name AS team_member_name
-        FROM 
-            ticket t
-        LEFT JOIN 
-            requester r ON t.requester = r.id
-        LEFT JOIN 
-            team tm ON t.team = tm.id
-        LEFT JOIN 
-            team_member tmm ON t.team_member = tmm.id
-        LEFT JOIN 
-            users u ON tmm.user = u.id
-        WHERE 
-            t.status = 'closed'
-    ";
+    public function getClosedTickets()
+    {
+        $query = "
+            SELECT 
+                t.id AS ticket_id,
+                t.title,
+                t.status,
+                t.priority,
+                r.name AS requester_name,
+                tm.name AS team_name,
+                u.name AS team_member_name
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                team_member tmm ON t.team_member = tmm.id
+            LEFT JOIN 
+                users u ON tmm.user = u.id
+            WHERE 
+                t.status = 'closed'
+        ";
 
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function getAllUsers()
-{
-    $query = "SELECT id, name FROM users WHERE role IN ('admin', 'member')";
-    $stmt = $this->db->prepare($query);
-    $stmt->execute();
+    public function getAllUsers()
+    {
+        $query = "SELECT id, name FROM users WHERE role IN ('admin', 'member')";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-
-
-
-
-
+    public function assignTeamAndMember($ticketId, $teamId, $teamMember)
+    {
+        $sql = "UPDATE ticket 
+                SET team = :team, team_member = :teamMember, updated_at = NOW() 
+                WHERE id = :ticketId";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'team' => $teamId,
+            'teamMember' => $teamMember,
+            'ticketId' => $ticketId
+        ]);
+    }
 
 }

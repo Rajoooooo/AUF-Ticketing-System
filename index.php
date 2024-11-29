@@ -72,6 +72,9 @@ try {
 
     // Route for viewing a single user
     $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
+
+    $router->get('/fetch-team-members/{teamId}', '\App\Controllers\TicketController@fetchTeamMembers');
+
     
 
     // Run the router
