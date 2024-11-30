@@ -395,46 +395,46 @@ public function addComment($ticketId)
     }
 }
 
-public function markCommentAsSeen($ticketId, $userId)
-{
-    $sql = "UPDATE comments SET seen = TRUE WHERE ticket_id = :ticketId AND user_id != :userId";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([
-        ':ticketId' => $ticketId,
-        ':userId' => $userId
-    ]);
-}
+// public function markCommentAsSeen($ticketId, $userId)
+// {
+//     $sql = "UPDATE comments SET seen = TRUE WHERE ticket_id = :ticketId AND user_id != :userId";
+//     $stmt = $this->db->prepare($sql);
+//     $stmt->execute([
+//         ':ticketId' => $ticketId,
+//         ':userId' => $userId
+//     ]);
+// }
 
-public function getAllTicketsWithUnreadComments($userId)
-{
-    $sql = "
-        SELECT 
-            t.id AS ticket_id,
-            t.title,
-            t.status,
-            t.priority,
-            r.name AS requester_name,
-            tm.name AS team_name,
-            u.name AS team_member,
-            (SELECT COUNT(*) FROM comments c WHERE c.ticket_id = t.id AND c.seen = FALSE AND c.user_id != :userId) > 0 AS hasUnreadComments
-        FROM 
-            ticket t
-        LEFT JOIN 
-            requester r ON t.requester = r.id
-        LEFT JOIN 
-            team tm ON t.team = tm.id
-        LEFT JOIN 
-            users u ON t.team_member = u.id
-        WHERE 
-            t.deleted_at IS NULL
-        ORDER BY 
-            t.created_at DESC
-    ";
+// public function getAllTicketsWithUnreadComments($userId)
+// {
+//     $sql = "
+//         SELECT 
+//             t.id AS ticket_id,
+//             t.title,
+//             t.status,
+//             t.priority,
+//             r.name AS requester_name,
+//             tm.name AS team_name,
+//             u.name AS team_member,
+//             (SELECT COUNT(*) FROM comments c WHERE c.ticket_id = t.id AND c.seen = FALSE AND c.user_id != :userId) > 0 AS hasUnreadComments
+//         FROM 
+//             ticket t
+//         LEFT JOIN 
+//             requester r ON t.requester = r.id
+//         LEFT JOIN 
+//             team tm ON t.team = tm.id
+//         LEFT JOIN 
+//             users u ON t.team_member = u.id
+//         WHERE 
+//             t.deleted_at IS NULL
+//         ORDER BY 
+//             t.created_at DESC
+//     ";
 
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([':userId' => $userId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+//     $stmt = $this->db->prepare($sql);
+//     $stmt->execute([':userId' => $userId]);
+//     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+// }
 
 
 public function viewTicket($id)

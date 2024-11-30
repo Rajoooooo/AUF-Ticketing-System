@@ -72,8 +72,25 @@
                       <td>{{priority}}</td>
                       <td>{{team_member}}</td>
                       <td>
-                        <a href="/ticket-details?id={{ticket_id}}" class="btn btn-outline-primary btn-sm">View</a>
-                        <a href="/set-ticket/{{ticket_id}}" class="btn btn-outline-secondary btn-sm">Set Ticket</a>
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
+                              id="dropdownMenuButton-{{id}}" 
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                              style="background-color: #4080b0; border-color: #4080b0;">
+                              Actions
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{id}}">
+                              <a class="dropdown-item" href="/view/{{ticket_id}}">
+                                  <i class="fa fa-eye"></i> View
+                              </a>
+                              <a class="dropdown-item" href="/comment/{{ticket_id}}">
+                                  <i class="fa fa-comment"></i> Comment
+                              </a>
+                              <a class="dropdown-item" href="/set-ticket/{{ticket_id}}">
+                                  <i class="fa fa-edit"></i> Set Ticket
+                              </a>
+                          </div>
+                      </div>
                       </td>
                     </tr>
                     {{/allTicket}}
