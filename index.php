@@ -79,9 +79,18 @@ try {
     // Route for viewing a single user
     $router->get('/view-user/{id}', '\App\Controllers\UserController@viewUser');
 
-    // $router->get('/fetch-team-members/{teamId}', '\App\Controllers\TicketController@fetchTeamMembers');
+    // comment
+
+    $router->get('/comment/{id}', '\App\Controllers\TicketController@viewComment');
+    $router->post('/comment/{ticketId}', '\App\Controllers\TicketController@addComment');
+
+    // view ticket
+
+    $router->get('/view/{id}', '\App\Controllers\TicketController@viewTicket');
+
 
     
+
 
     // Run the router
     $router->run();

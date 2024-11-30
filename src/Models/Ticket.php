@@ -62,12 +62,36 @@ class Ticket extends BaseModel
     }
 
     public function getTicketById($id)
-    {
-        $sql = "SELECT * FROM ticket WHERE id = :id AND deleted_at IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+{
+    $sql = "
+        SELECT 
+            t.id, 
+            t.title, 
+            t.status, 
+            t.priority, 
+            t.created_at, 
+            r.name AS requester_name, 
+            tm.name AS team_name, 
+            u.name AS team_member
+        FROM 
+            ticket t
+        LEFT JOIN 
+            requester r ON t.requester = r.id
+        LEFT JOIN 
+            team tm ON t.team = tm.id
+        LEFT JOIN 
+            users u ON t.team_member = u.id
+        WHERE 
+            t.id = :id AND t.deleted_at IS NULL
+    ";
+
+    $stmt = $this->db->prepare($sql);
+
+    $stmt->execute([':id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 
     // public function updateStatus($id, $status)
     // {
@@ -230,5 +254,39 @@ class Ticket extends BaseModel
             ':ticketId' => $ticketId
         ]);
     }
+
+
+
+    public function getTicketByIdWithDetails($id)
+{
+    $query = "
+        SELECT 
+            t.id, 
+            t.title, 
+            t.status, 
+            t.priority, 
+            t.created_at, 
+            r.name AS requester_name, 
+            tm.name AS team_name, 
+            u.name AS team_member
+        FROM 
+            ticket t
+        LEFT JOIN 
+            requester r ON t.requester = r.id
+        LEFT JOIN 
+            team tm ON t.team = tm.id
+        LEFT JOIN 
+            users u ON t.team_member = u.id
+        WHERE 
+            t.id = :id AND t.deleted_at IS NULL
+    ";
+
+    $stmt = $this->db->prepare($query);
+    $stmt->execute([':id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+    
 
 }

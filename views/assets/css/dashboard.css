@@ -274,4 +274,9 @@ footer .copyright {
     margin-top: 56px;
     margin-left: 0;
   }
+
+  .container {
+    width: auto; /* Ensure it's not constrained */
+    max-width: none; /* Remove any max-width constraints */
+  }
 }

@@ -11292,3 +11292,17 @@ body.sidebar-toggled footer.sticky-footer {
   border: 1px solid #ccc; /* Optional: Add a border for better visual */
   padding: 10px; /* Optional: Add padding for better readability */
 }
+
+.container {
+  max-width: 1200px; /* or any fixed width */
+}
+
+.container {
+  width: auto; /* Ensure it's not constrained */
+  max-width: none; /* Remove any max-width constraints */
+}
+
+*:not(input):not(textarea) {
+  user-select: none;
+  caret-color: transparent;
+}

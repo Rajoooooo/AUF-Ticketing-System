@@ -8,6 +8,7 @@ use App\Models\Requester;
 use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
+use App\Models\Comment;
 
 class TicketController extends BaseController
 {
@@ -338,5 +339,148 @@ class TicketController extends BaseController
         $members = $teamMemberModel->getMembersByTeamId($teamId);
         echo json_encode($members);
     }
+
+    public function viewComment($id)
+{
+    // Create an instance of the Ticket model
+    $ticketModel = new \App\Models\Ticket();
+
+    // Fetch ticket details by ID using the instance method
+    $ticket = $ticketModel->getTicketById($id);
+
+    // Check if ticket exists
+    if (!$ticket) {
+        // If no ticket found, redirect to dashboard
+        header('Location: /dashboard');
+        exit();
+    }
+
+    // Fetch comments related to the ticket using the Comment model
+    $comments = \App\Models\Comment::getCommentsByTicketId($id);
+
+    // Pass ticket and comments data to the view
+    $this->render('comment', [
+        'ticket' => $ticket,
+        'comments' => $comments
+    ]);
+}
+
+public function addComment($ticketId)
+{
+    session_start();
+
+    if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
+        $commentText = $_POST['comment_text'];
+
+        // Ensure user ID is correctly retrieved from the session
+        if (isset($_SESSION['user']['id'])) {
+            $userId = $_SESSION['user']['id'];
+
+            $comment = new \App\Models\Comment();
+            if ($comment->addComment($ticketId, $commentText, $userId)) {
+                $_SESSION['msg'] = "Comment added successfully.";
+            } else {
+                $_SESSION['err'] = "Failed to add comment.";
+            }
+        } else {
+            $_SESSION['err'] = "You must be logged in to comment.";
+        }
+
+        header('Location: /dashboard');
+        exit();
+    } else {
+        $_SESSION['err'] = "Please enter a comment.";
+        header("Location: /comment/{$ticketId}");
+        exit();
+    }
+}
+
+public function markCommentAsSeen($ticketId, $userId)
+{
+    $sql = "UPDATE comments SET seen = TRUE WHERE ticket_id = :ticketId AND user_id != :userId";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([
+        ':ticketId' => $ticketId,
+        ':userId' => $userId
+    ]);
+}
+
+public function getAllTicketsWithUnreadComments($userId)
+{
+    $sql = "
+        SELECT 
+            t.id AS ticket_id,
+            t.title,
+            t.status,
+            t.priority,
+            r.name AS requester_name,
+            tm.name AS team_name,
+            u.name AS team_member,
+            (SELECT COUNT(*) FROM comments c WHERE c.ticket_id = t.id AND c.seen = FALSE AND c.user_id != :userId) > 0 AS hasUnreadComments
+        FROM 
+            ticket t
+        LEFT JOIN 
+            requester r ON t.requester = r.id
+        LEFT JOIN 
+            team tm ON t.team = tm.id
+        LEFT JOIN 
+            users u ON t.team_member = u.id
+        WHERE 
+            t.deleted_at IS NULL
+        ORDER BY 
+            t.created_at DESC
+    ";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':userId' => $userId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+public function viewTicket($id)
+{
+    session_start();
+
+    // Check if the user is logged in
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
+    }
+
+    // Models for Ticket and Comment
+    $ticketModel = new \App\Models\Ticket();
+    $commentModel = new \App\Models\Comment();
+
+    // Fetch the ticket details
+    $ticket = $ticketModel->getTicketByIdWithDetails($id);
+
+    if (!$ticket) {
+        $_SESSION['err'] = "Ticket not found.";
+        header('Location: /dashboard');
+        exit();
+    }
+
+    // Fetch comments related to the ticket
+    $comments = $commentModel->getCommentsByTicketId($id);
+
+    // Include current logged-in user's name
+    $currentUser = $_SESSION['user'];
+
+    // Render the view.mustache template
+    $template = 'view';
+    $data = [
+        'title' => 'View Ticket',
+        'ticket' => $ticket,
+        'comments' => $comments,
+        'currentUser' => $currentUser,
+    ];
+
+    echo $this->render($template, $data);
+}
+
+
+
+
+
 
 }

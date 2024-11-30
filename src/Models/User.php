@@ -23,14 +23,48 @@ class User extends BaseModel
         return $this->db->lastInsertId();
     }
 
-    public function getUserById($id)
-    {
-        $sql = "SELECT * FROM users WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+   public function viewTicket($id)
+{
+    session_start();
+
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
     }
+
+    $ticketModel = new \App\Models\Ticket();
+    $commentModel = new \App\Models\Comment();
+
+    // Fetch ticket details
+    $ticket = $ticketModel->getTicketByIdWithDetails($id);
+    if (!$ticket) {
+        $_SESSION['err'] = "Ticket not found.";
+        header('Location: /dashboard');
+        exit();
+    }
+
+    // Fetch comments and include user details
+    $rawComments = $commentModel::getCommentsByTicketId($id);
+    $userModel = new \App\Models\User();
+    $comments = array_map(function ($comment) use ($userModel) {
+        $user = $userModel->getUserById($comment['user_id']);
+        return [
+            'comment_text' => $comment['comment_text'],
+            'created_at' => $comment['created_at'],
+            'user_name' => $user['name'] ?? 'Unknown User',
+        ];
+    }, $rawComments);
+
+    $template = 'view';
+    $data = [
+        'title' => 'View Ticket',
+        'ticket' => $ticket,
+        'comments' => $comments,
+        'currentUser' => $_SESSION['user'],
+    ];
+
+    echo $this->render($template, $data);
+}
 
     // Add this method to handle login by email
     public function getUserByEmail($email)
@@ -65,6 +99,17 @@ class User extends BaseModel
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function getUserById($id)
+{
+    $sql = "SELECT * FROM users WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(['id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+    
 
     
 }
