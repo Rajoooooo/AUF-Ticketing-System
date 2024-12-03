@@ -12,7 +12,28 @@ use App\Models\Comment;
 
 class TicketController extends BaseController
 {
-    // Show the form to create a new ticket
+    public function showDashboard()
+{
+    session_start();
+
+    // Fetch tickets from the database
+    $ticketModel = new Ticket();
+    $tickets = $ticketModel->getAllTickets(); // Ensure this fetches data correctly
+
+    // Debug: Check if tickets are fetched
+    file_put_contents('debug_dashboard_tickets.log', print_r($tickets, true));
+
+    // Pass tickets as JSON for the frontend
+    $data = [
+        'tickets_json' => json_encode($tickets), // Pass as JSON for JavaScript
+        'tickets' => $tickets // Pass for table rendering
+    ];
+
+    // Render the dashboard with the data
+    echo $this->render('dashboard', $data);
+}
+
+
     public function showTicketForm()
     {
         session_start();
@@ -103,12 +124,14 @@ class TicketController extends BaseController
 
         $ticketModel = new Ticket();
         $tickets = $ticketModel->getAllTickets();
+        
 
         $template = 'dashboard';
         $data = [
             'title' => 'Dashboard',
             'user' => $_SESSION['user'],
-            'tickets' => $tickets
+            
+            'tickets' => json_encode($tickets), // Pass tickets data as JSON
         ];
 
         echo $this->render($template, $data);
@@ -217,22 +240,29 @@ class TicketController extends BaseController
 
     // Show all unassigned tickets
     public function showUnassignedTable()
-    {
-        session_start();
+{
+    session_start();
 
-        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-            header('Location: /login-form');
-            exit();
-        }
-
-        $template = 'unassigned';
-        $data = [
-            'title' => 'Unassigned Tickets',
-            'user' => $_SESSION['user']
-        ];
-
-        echo $this->render($template, $data);
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
     }
+
+    $ticketModel = new \App\Models\Ticket(); // Initialize the model
+    $unassignedTickets = $ticketModel->getUnassignedTickets();
+
+
+    $template = 'unassigned';
+    $data = [
+        'title' => 'Unassigned Tickets',
+        'user' => $_SESSION['user'],
+        'allTicket' => $unassignedTickets,
+    ];
+
+    echo $this->render($template, $data);
+}
+
+
 
     // Show all my tickets
     public function showMyticketsTable()
@@ -395,48 +425,6 @@ public function addComment($ticketId)
     }
 }
 
-// public function markCommentAsSeen($ticketId, $userId)
-// {
-//     $sql = "UPDATE comments SET seen = TRUE WHERE ticket_id = :ticketId AND user_id != :userId";
-//     $stmt = $this->db->prepare($sql);
-//     $stmt->execute([
-//         ':ticketId' => $ticketId,
-//         ':userId' => $userId
-//     ]);
-// }
-
-// public function getAllTicketsWithUnreadComments($userId)
-// {
-//     $sql = "
-//         SELECT 
-//             t.id AS ticket_id,
-//             t.title,
-//             t.status,
-//             t.priority,
-//             r.name AS requester_name,
-//             tm.name AS team_name,
-//             u.name AS team_member,
-//             (SELECT COUNT(*) FROM comments c WHERE c.ticket_id = t.id AND c.seen = FALSE AND c.user_id != :userId) > 0 AS hasUnreadComments
-//         FROM 
-//             ticket t
-//         LEFT JOIN 
-//             requester r ON t.requester = r.id
-//         LEFT JOIN 
-//             team tm ON t.team = tm.id
-//         LEFT JOIN 
-//             users u ON t.team_member = u.id
-//         WHERE 
-//             t.deleted_at IS NULL
-//         ORDER BY 
-//             t.created_at DESC
-//     ";
-
-//     $stmt = $this->db->prepare($sql);
-//     $stmt->execute([':userId' => $userId]);
-//     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-// }
-
-
 public function viewTicket($id)
 {
     session_start();
@@ -479,8 +467,30 @@ public function viewTicket($id)
 }
 
 
+public function showMyTickets()
+{
+    session_start();
 
+    if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+        header('Location: /login-form');
+        exit();
+    }
 
+    $userId = $_SESSION['user']['id'];
+
+    $ticketModel = new \App\Models\Ticket();
+    $myTickets = $ticketModel->getTicketsByAssignedUser($userId);
+
+    $template = 'mytickets';
+    $data = [
+        'title' => 'My Tickets',
+        'user' => $_SESSION['user'],
+        'tickets' => $myTickets
+    ];
+
+    echo $this->render($template, $data);
+    
+}
 
 
 }

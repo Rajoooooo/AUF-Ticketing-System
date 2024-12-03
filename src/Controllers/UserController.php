@@ -28,7 +28,7 @@ class UserController extends BaseController
 
         $users = $this->userModel->getAllUsers();
         $template = 'users';
-        $data = ['title' => 'User Table', 'users' => $users];
+        $data = ['title' => 'User Table', 'users' => $users, 'user' => $_SESSION['user']];
 
         echo $this->render($template, $data);
     }

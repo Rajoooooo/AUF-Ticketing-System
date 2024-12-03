@@ -33,9 +33,6 @@ try {
     $router->get('/set-ticket/{id}', '\App\Controllers\TicketController@showSetTicketForm');
     $router->post('/set-ticket/{id}', '\App\Controllers\TicketController@updateTicketStatus');
 
-
-
-
     //Route for Open tickets
     $router->get('/open', '\App\Controllers\TicketController@showOpenTable');
 
@@ -88,8 +85,11 @@ try {
 
     $router->get('/view/{id}', '\App\Controllers\TicketController@viewTicket');
 
+    $router->get('/my-tickets', '\App\Controllers\TicketController@showMyTickets');
 
-    
+    $router->get('/generate-report', '\App\Controllers\DashboardController@generateReport');
+    $router->get('/dashboard/generate-report', '\App\Controllers\DashboardController@generateReport');
+
 
 
     // Run the router

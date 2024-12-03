@@ -1,0 +1,147 @@
+Array
+(
+    [0] => Array
+        (
+            [id] => 45
+            [title] => There are some issue!!!!
+            [status] => closed
+            [priority] => medium
+            [created_at] => 2024-12-03 21:49:04
+            [requester] => Mark 
+            [team] => College of Allied and Medical Professions (CAMP)
+            [team_member] => AUF admin
+        )
+
+    [1] => Array
+        (
+            [id] => 44
+            [title] => Closed
+            [status] => pending
+            [priority] => high
+            [created_at] => 2024-12-01 12:18:46
+            [requester] => Unassigned ticket
+            [team] => College of Allied and Medical Professions (CAMP)
+            [team_member] => AUF admin
+        )
+
+    [2] => Array
+        (
+            [id] => 43
+            [title] => Solved ticket
+            [status] => solved
+            [priority] => high
+            [created_at] => 2024-12-01 12:18:12
+            [requester] => Unassigned ticket
+            [team] => 
+            [team_member] => 
+        )
+
+    [3] => Array
+        (
+            [id] => 42
+            [title] => Solved ticket
+            [status] => solved
+            [priority] => medium
+            [created_at] => 2024-12-01 12:16:36
+            [requester] => Unassigned ticket
+            [team] => 
+            [team_member] => 
+        )
+
+    [4] => Array
+        (
+            [id] => 41
+            [title] => My Ticket
+            [status] => open
+            [priority] => medium
+            [created_at] => 2024-12-01 02:01:42
+            [requester] => Unassigned ticket
+            [team] => College of Allied and Medical Professions (CAMP)
+            [team_member] => AUF admin
+        )
+
+    [5] => Array
+        (
+            [id] => 40
+            [title] => Unassigned ticket
+            [status] => open
+            [priority] => low
+            [created_at] => 2024-12-01 01:31:57
+            [requester] => Unassigned ticket
+            [team] => 
+            [team_member] => 
+        )
+
+    [6] => Array
+        (
+            [id] => 38
+            [title] => There are some issue!!!!
+            [status] => pending
+            [priority] => low
+            [created_at] => 2024-11-29 23:19:40
+            [requester] => Jansen
+            [team] => College Of Compute Studies (CCS)
+            [team_member] => Rafael John L. Castro
+        )
+
+    [7] => Array
+        (
+            [id] => 36
+            [title] => There are some issue!!!!
+            [status] => pending
+            [priority] => low
+            [created_at] => 2024-11-29 16:56:38
+            [requester] => Andreas
+            [team] => College of Allied and Medical Professions (CAMP)
+            [team_member] => AUF admin
+        )
+
+    [8] => Array
+        (
+            [id] => 35
+            [title] => There are some issue!!!!
+            [status] => solved
+            [priority] => medium
+            [created_at] => 2024-11-29 16:33:40
+            [requester] => John doe
+            [team] => College of Business and Accountancy (CBA)
+            [team_member] => Gab Javierto
+        )
+
+    [9] => Array
+        (
+            [id] => 34
+            [title] => There are some issue!!!!
+            [status] => open
+            [priority] => low
+            [created_at] => 2024-11-29 16:26:29
+            [requester] => carlo
+            [team] => College Of Compute Studies (CCS)
+            [team_member] => Sample
+        )
+
+    [10] => Array
+        (
+            [id] => 30
+            [title] => There are some issue!!!!
+            [status] => pending
+            [priority] => high
+            [created_at] => 2024-11-29 15:30:37
+            [requester] => gab
+            [team] => College of Business and Accountancy (CBA)
+            [team_member] => Rafael John L. Castro
+        )
+
+    [11] => Array
+        (
+            [id] => 28
+            [title] => There are some issue!!!!
+            [status] => closed
+            [priority] => low
+            [created_at] => 2024-11-29 15:23:44
+            [requester] => Rafael John L. Castro
+            [team] => College of Business and Accountancy (CBA)
+            [team_member] => Gab Javierto
+        )
+
+)

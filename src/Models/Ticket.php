@@ -140,6 +140,40 @@ class Ticket extends BaseModel
     }
     
 
+
+    public function getUnassignedTickets()
+    
+{
+    $query = "
+        SELECT 
+    t.id AS ticket_id,
+    t.title,
+    t.status,
+    t.priority,
+    r.name AS requester_name,
+    tm.name AS team_name,
+    u.name AS team_member
+FROM 
+    ticket t
+LEFT JOIN 
+    requester r ON t.requester = r.id
+LEFT JOIN 
+    team tm ON t.team = tm.id
+LEFT JOIN 
+    users u ON t.team_member = u.id
+WHERE 
+    u.name IS NULL -- No team member assigned
+ORDER BY 
+    t.created_at DESC
+    ";
+
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
     public function getPendingTickets()
     {
         $query = "
@@ -287,6 +321,67 @@ class Ticket extends BaseModel
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-    
+public function getTicketsByAssignedUser($userId)
+{
+    $sql = "
+        SELECT 
+            t.id,
+            t.title,
+            t.status,
+            t.priority,
+            t.created_at,
+            r.name AS requester_name,
+            tm.name AS team_name,
+            u.name AS team_member
+        FROM 
+            ticket t
+        LEFT JOIN 
+            requester r ON t.requester = r.id
+        LEFT JOIN 
+            team tm ON t.team = tm.id
+        LEFT JOIN 
+            users u ON t.team_member = u.id
+        WHERE 
+            t.team_member = :userId
+    ";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':userId' => $userId]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function getTicketsByDateRange($startDate, $endDate)
+{
+    $sql = "SELECT 
+                t.title, 
+                t.status, 
+                t.priority, 
+                t.created_at, 
+                r.name AS requester, 
+                tm.name AS team, 
+                u.name AS team_member
+            FROM 
+                ticket t
+            LEFT JOIN 
+                requester r ON t.requester = r.id
+            LEFT JOIN 
+                team tm ON t.team = tm.id
+            LEFT JOIN 
+                users u ON t.team_member = u.id
+            WHERE 
+                t.created_at BETWEEN :start_date AND :end_date
+            ORDER BY 
+                t.created_at DESC";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':start_date', $startDate);
+    $stmt->bindParam(':end_date', $endDate);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 
 }
