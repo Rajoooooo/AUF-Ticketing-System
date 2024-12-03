@@ -48,8 +48,8 @@ try {
     //Route for Unassigned tickets
     $router->get('/unassigned', '\App\Controllers\TicketController@showUnassignedTable');
 
-    //Route for My tickets
-    $router->get('/mytickets', '\App\Controllers\TicketController@showMyticketsTable');
+    // //Route for My tickets
+    // $router->get('/mytickets', '\App\Controllers\TicketController@showMyticketsTable');
 
     //Route for Team
     $router->get('/team', '\App\Controllers\TeamController@showTeamTable');
@@ -86,6 +86,7 @@ try {
     $router->get('/view/{id}', '\App\Controllers\TicketController@viewTicket');
 
     $router->get('/my-tickets', '\App\Controllers\TicketController@showMyTickets');
+
 
     $router->get('/generate-report', '\App\Controllers\DashboardController@generateReport');
     $router->get('/dashboard/generate-report', '\App\Controllers\DashboardController@generateReport');
