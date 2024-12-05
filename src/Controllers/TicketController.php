@@ -359,7 +359,8 @@ class TicketController extends BaseController
                 $_SESSION['err'] = 'Failed to update ticket status.';
             }
 
-            header('Location: /dashboard');
+            // header('Location: /dashboard');
+            header('Location: /my-tickets');
             exit();
         }
     }
