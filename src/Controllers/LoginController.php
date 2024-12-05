@@ -33,13 +33,23 @@ class LoginController extends BaseController {
             $user = $userModel->getUserByEmail($email);
 
             if ($user && password_verify($password, $user['password'])) {
+                // Set session data
                 $_SESSION['logged-in'] = true;
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'name' => $user['name'],
                     'role' => $user['role'], // Include the role in the session
                 ];
-                header('Location: /dashboard');
+
+                // Redirect based on role
+                if ($user['role'] === 'admin') {
+                    header('Location: /dashboard');
+                } elseif ($user['role'] === 'member') {
+                    header('Location: /my-tickets');
+                } else {
+                    // Fallback for undefined roles
+                    header('Location: /login-form');
+                }
                 exit();
             } else {
                 $error = 'Invalid email or password';
