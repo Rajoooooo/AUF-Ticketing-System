@@ -30,11 +30,15 @@ class LoginController extends BaseController {
             $error = 'Please enter your password';
         } else {
             $userModel = new User($conn); // Use the global connection
-            $user = $userModel->getUserByEmail($email); // This method is now defined
+            $user = $userModel->getUserByEmail($email);
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['logged-in'] = true;
-                $_SESSION['user'] = $user;
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'role' => $user['role'], // Include the role in the session
+                ];
                 header('Location: /dashboard');
                 exit();
             } else {

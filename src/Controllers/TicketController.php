@@ -265,23 +265,23 @@ class TicketController extends BaseController
 
 
     // Show all my tickets
-    public function showMyticketsTable()
-    {
-        session_start();
+    // public function showMyticketsTable()
+    // {
+    //     session_start();
 
-        if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
-            header('Location: /login-form');
-            exit();
-        }
+    //     if (!isset($_SESSION['logged-in']) || !$_SESSION['logged-in']) {
+    //         header('Location: /login-form');
+    //         exit();
+    //     }
 
-        $template = 'mytickets';
-        $data = [
-            'title' => 'My Tickets',
-            'user' => $_SESSION['user']
-        ];
+    //     $template = 'mytickets';
+    //     $data = [
+    //         'title' => 'My Tickets',
+    //         'user' => $_SESSION['user']
+    //     ];
 
-        echo $this->render($template, $data);
-    }
+    //     echo $this->render($template, $data);
+    // }
 
     // Show the form to set ticket
     public function showSetTicketForm($id)
@@ -491,6 +491,5 @@ public function showMyTickets()
     echo $this->render($template, $data);
     
 }
-
 
 }

@@ -85,7 +85,9 @@ try {
 
     $router->get('/view/{id}', '\App\Controllers\TicketController@viewTicket');
 
+    // $router->get('/my-tickets', '\App\Controllers\TicketController@showMyTickets');
     $router->get('/my-tickets', '\App\Controllers\TicketController@showMyTickets');
+
 
 
     $router->get('/generate-report', '\App\Controllers\DashboardController@generateReport');
