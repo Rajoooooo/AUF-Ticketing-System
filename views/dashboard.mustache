@@ -44,6 +44,10 @@
       flex-wrap: wrap;
     }
 
+    nav .pagination {
+      justify-content: center;
+    }
+
     .status-btn, .priority-btn {
       padding: 5px 10px;
       color: white;
@@ -51,6 +55,7 @@
       border: none;
       border-radius: 5px;
     }
+    
   </style>
 </head>
 
@@ -105,61 +110,72 @@
     </div>
   </div>
 </div>
-      <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: 20px; max-width: 83%; margin-top: -0px;">
-        <div class="card-body">
-          <div class="table-container" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: -5px; max-width: 150%; margin-top: -20px">
-            <div class="table-responsive">
-              <table class="table table-bordered table-sm" id="dataTable" style="width: 100%;" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Subject</th>
-                    <th>Requester</th>
-                    <th>Team</th>
-                    <th>Ticket Status</th>
-                    <th>Priority</th>
-                    <th>Assigned To</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#tickets}}
-                  <tr>
-                    <td>{{title}}</td>
-                    <td>{{requester}}</td>
-                    <td>{{team}}</td>
-                    <td>
-                      <button class="status-btn" id="status-{{id}}">{{status}}</button>
-                    </td>
-                    <td>
-                      <button class="priority-btn" id="priority-{{id}}">{{priority}}</button>
-                    </td>
-                    <td>{{team_member}}</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
-                                id="dropdownMenuButton-{{id}}" 
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-                                style="background-color: #4080b0; border-color: #4080b0;">
-                          Actions
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{id}}">
-                          <a class="dropdown-item" href="/view/{{id}}"><i class="fa fa-eye"></i> View</a>
-                          <a class="dropdown-item" href="/comment/{{id}}"><i class="fa fa-comment"></i> Comment</a>
-                          <a class="dropdown-item" href="/set-ticket/{{id}}"><i class="fa fa-edit"></i> Set Ticket</a>
-                          <a class="dropdown-item text-danger" href="/ticket/delete/{{id}}">
-                            <i class="fa fa-trash"></i> Delete
-                          </a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {{/tickets}}
-                </tbody>
-              </table>
-            </div>
-          </div>
+<div class="d-flex justify-content-between align-items-center mb-3" style="margin-left: 20px; max-width: 83%; margin-top: -0px;">
+  <input
+    type="text"
+    id="searchBar"
+    class="form-control"
+    placeholder="Search by Requester"
+    style="max-width: 300px;"
+  />
+</div>
+      <div class="card mb-3 flex-grow-1" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-left: 20px; max-width: 83%; margin-top: -0px;">
+          <div class="card-body">
+            <!-- Table Container -->
+            <div class="table-container" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; margin-left: -10px; max-width: 115%; margin-top: -20px">
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm" id="dataTable" style="width: 100%;" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Requester</th>
+                <th>Team</th>
+                <th>Ticket Status</th>
+                <th>Priority</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#tickets}}
+              <tr>
+                <td>{{title}}</td>
+                <td>{{requester}}</td>
+                <td>{{team}}</td>
+                <td><button class="status-btn">{{status}}</button></td>
+                <td><button class="priority-btn">{{priority}}</button></td>
+                <td>{{team_member}}</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions</button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/view/{{id}}">View</a>
+                      <a class="dropdown-item" href="/comment/{{id}}">Comment</a>
+                      <a class="dropdown-item" href="/set-ticket/{{id}}">Set Ticket</a>
+                      <a class="dropdown-item text-danger" href="/ticket/delete/{{id}}">Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {{/tickets}}
+            </tbody>
+          </table>
         </div>
       </div>
+<nav class="d-flex justify-content-center align-items-center mt-3">
+  <ul class="pagination mb-0">
+    <li class="page-item">
+      <button class="page-link" id="prevPage" aria-label="Previous" disabled>&laquo;</button>
+    </li>
+    <li class="page-item">
+      <span class="page-link" id="pageInfo">1 of 1</span>
+    </li>
+    <li class="page-item">
+      <button class="page-link" id="nextPage" aria-label="Next" disabled>&raquo;</button>
+    </li>
+  </ul>
+</nav>
+      
 
       <!-- Footer -->
       <footer class="bg-light py-3 text-center" style="padding-left: 0px;">
@@ -171,7 +187,119 @@
   </div>
 </div>
 
+
+
 <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const rowsPerPage = 10;
+    const table = document.getElementById('dataTable');
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    let currentPage = 1;
+
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const pageInfo = document.getElementById('pageInfo');
+
+    function updatePaginationButtons() {
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages;
+      pageInfo.textContent = `${currentPage} of ${totalPages}`;
+    }
+
+    function renderPage(page) {
+      rows.forEach((row, index) => {
+        row.style.display = (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) ? '' : 'none';
+      });
+      currentPage = page;
+      updatePaginationButtons();
+    }
+
+    prevPageBtn.addEventListener('click', function () {
+      if (currentPage > 1) renderPage(currentPage - 1);
+    });
+
+    nextPageBtn.addEventListener('click', function () {
+      if (currentPage < totalPages) renderPage(currentPage + 1);
+    });
+
+    if (rows.length > rowsPerPage) {
+      renderPage(1);
+    } else {
+      pageInfo.textContent = '1 of 1';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchBar = document.getElementById('searchBar');
+    const table = document.getElementById('dataTable');
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+    searchBar.addEventListener('input', function () {
+      const query = searchBar.value.trim().toLowerCase();
+
+      rows.forEach((row) => {
+        const requester = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (requester.includes(query)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none'; 
+        }
+      });
+
+      const visibleRows = rows.filter((row) => row.style.display === '');
+      const totalPages = Math.ceil(visibleRows.length / rowsPerPage);
+
+      function renderPage(page) {
+        const startIndex = (page - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+
+        visibleRows.forEach((row, index) => {
+          if (index >= startIndex && index < endIndex) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        currentPage = page;
+        updatePaginationButtons();
+      }
+
+      createPaginationControls(visibleRows.length);
+      if (visibleRows.length > 0) {
+        renderPage(1);
+      } else {
+        pageInfo.textContent = '0 of 0'
+        prevPageBtn.disabled = true;
+        nextPageBtn.disabled = true;
+      }
+    });
+
+    function createPaginationControls(totalVisibleRows) {
+      paginationControls.innerHTML = '';
+      const totalPages = Math.ceil(totalVisibleRows / rowsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.classList.add('page-item');
+        if (i === 1) li.classList.add('active');
+        const a = document.createElement('a');
+        a.classList.add('page-link');
+        a.href = '#';
+        a.textContent = i;
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          renderPage(i);
+        });
+        li.appendChild(a);
+        paginationControls.appendChild(li);
+      }
+    }
+  });
+
         document.addEventListener("DOMContentLoaded", function () {
           // Set status button colors
           const statusElements = document.querySelectorAll('.status-btn');
