@@ -147,14 +147,27 @@
                 <td>{{team_member}}</td>
                 <td>
                   <div class="dropdown">
-                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions</button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="/view/{{id}}">View</a>
-                      <a class="dropdown-item" href="/comment/{{id}}">Comment</a>
-                      <a class="dropdown-item" href="/set-ticket/{{id}}">Set Ticket</a>
-                      <a class="dropdown-item text-danger" href="/ticket/delete/{{id}}">Delete</a>
+                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
+                        id="dropdownMenuButton-{{id}}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                        style="background-color: #4080b0; border-color: #4080b0;">
+                        Actions
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{id}}">
+                        <a class="dropdown-item" href="/view/{{id}}">
+                            <i class="fa fa-eye"></i> View
+                        </a>
+                        <a class="dropdown-item" href="/comment/{{id}}">
+                            <i class="fa fa-comment"></i> Comment
+                        </a>
+                        <a class="dropdown-item" href="/set-ticket/{{id}}">
+                            <i class="fa fa-edit"></i> Set Ticket
+                        </a>
+                        <a class="dropdown-item text-danger" href="/ticket/delete/{{id}}">
+                            <i class="fa fa-trash"></i> Delete
+                        </a>
                     </div>
-                  </div>
+                </div>                
                 </td>
               </tr>
               {{/tickets}}

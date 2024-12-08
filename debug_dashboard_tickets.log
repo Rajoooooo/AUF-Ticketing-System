@@ -52,12 +52,12 @@ Array
         (
             [id] => 41
             [title] => My Ticket
-            [status] => open
+            [status] => solved
             [priority] => medium
             [created_at] => 2024-12-01 02:01:42
             [requester] => Unassigned ticket
-            [team] => College of Allied and Medical Professions (CAMP)
-            [team_member] => AUF admin
+            [team] => College Of Compute Studies (CCS)
+            [team_member] => Rafael John L. Castro
         )
 
     [5] => Array
@@ -68,8 +68,8 @@ Array
             [priority] => low
             [created_at] => 2024-12-01 01:31:57
             [requester] => Unassigned ticket
-            [team] => 
-            [team_member] => 
+            [team] => College of Allied and Medical Professions (CAMP)
+            [team_member] => AUF admin
         )
 
     [6] => Array
@@ -88,7 +88,7 @@ Array
         (
             [id] => 36
             [title] => There are some issue!!!!
-            [status] => pending
+            [status] => open
             [priority] => low
             [created_at] => 2024-11-29 16:56:38
             [requester] => Andreas
