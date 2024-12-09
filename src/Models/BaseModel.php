@@ -32,7 +32,7 @@ class BaseModel
     public static function getDbConnection()
     {
         if (!self::$dbConnection) {
-            self::$dbConnection = new PDO("mysql:host=localhost;dbname=sample_helpdeskdb", "root", "");
+            self::$dbConnection = new PDO("mysql:host=localhost;dbname=auf_helpdeskdb", "root", "");
             self::$dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         return self::$dbConnection;

@@ -329,41 +329,60 @@ class TicketController extends BaseController
     }
 
     public function updateTicketStatus($id)
-    {
-        session_start();
+{
+    session_start();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $newStatus = $_POST['status'];
-            $team = $_POST['team'] ?? null;
-            $teamMember = $_POST['team_member'] ?? null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $newStatus = $_POST['status'];
+        $team = $_POST['team'] ?? null;
+        $teamMember = $_POST['team_member'] ?? null;
 
-            if (!in_array($newStatus, ['open', 'pending', 'solved', 'closed'])) {
-                $_SESSION['err'] = 'Invalid status selected.';
-                header("Location: /set-ticket/{$id}");
-                exit();
-            }
-
-            $ticketModel = new Ticket();
-
-            // Update status
-            $statusUpdated = $ticketModel->updateStatus($id, $newStatus);
-
-            // Optionally assign team and member if provided
-            if ($team || $teamMember) {
-                $ticketModel->assignTeamAndMember($id, $team, $teamMember);
-            }
-
-            if ($statusUpdated) {
-                $_SESSION['msg'] = 'Ticket status updated successfully.';
-            } else {
-                $_SESSION['err'] = 'Failed to update ticket status.';
-            }
-
-            // header('Location: /dashboard');
-            header('Location: /my-tickets');
+        // Validate the provided status
+        $validStatuses = ['open', 'pending', 'solved', 'closed'];
+        if (!in_array($newStatus, $validStatuses)) {
+            $_SESSION['err'] = 'Invalid status selected.';
+            header("Location: /set-ticket/{$id}");
             exit();
         }
+
+        // Get user role from the session
+        $userRole = $_SESSION['user']['role'] ?? 'member'; // Default to 'member' if not set
+        error_log('User Role in updateTicketStatus: ' . $userRole);
+
+        $ticketModel = new Ticket();
+
+        // Update the ticket's status
+        $statusUpdated = $ticketModel->updateStatus($id, $newStatus);
+
+        // Optionally assign team and member if provided
+        if ($team || $teamMember) {
+            $ticketModel->assignTeamAndMember($id, $team, $teamMember);
+        }
+
+        // Set success or error message
+        if ($statusUpdated) {
+            $_SESSION['msg'] = 'Ticket status updated successfully.';
+        } else {
+            $_SESSION['err'] = 'Failed to update ticket status.';
+        }
+
+        // Redirect based on role
+        if ($userRole === 'admin') {
+            header('Location: /dashboard');
+        } elseif ($userRole === 'member') {
+            header('Location: /my-tickets');
+        } else {
+            $_SESSION['err'] = 'Invalid user role.';
+            header('Location: /');
+        }
+        exit();
     }
+
+    $_SESSION['err'] = 'Invalid request method.';
+    header('Location: /');
+    exit();
+}
+
     public function fetchTeamMembers($teamId)
     {
         $teamMemberModel = new TeamMember();
@@ -400,31 +419,45 @@ public function addComment($ticketId)
 {
     session_start();
 
-    if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
-        $commentText = $_POST['comment_text'];
+    // Ensure the request contains a non-empty comment
+    if (isset($_POST['comment_text']) && !empty(trim($_POST['comment_text']))) {
+        $commentText = trim($_POST['comment_text']);
 
-        // Ensure user ID is correctly retrieved from the session
-        if (isset($_SESSION['user']['id'])) {
+        // Ensure user information is available in the session
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['id'])) {
             $userId = $_SESSION['user']['id'];
+            $userRole = $_SESSION['user']['role'] ?? 'member'; // Default to 'member'
 
             $comment = new \App\Models\Comment();
+
+            // Add the comment and check the result
             if ($comment->addComment($ticketId, $commentText, $userId)) {
                 $_SESSION['msg'] = "Comment added successfully.";
             } else {
                 $_SESSION['err'] = "Failed to add comment.";
             }
-        } else {
-            $_SESSION['err'] = "You must be logged in to comment.";
-        }
 
-        header('Location: /dashboard');
-        exit();
+            // Redirect based on the user's role
+            if ($userRole === 'admin') {
+                header('Location: /dashboard');
+            } else {
+                header('Location: /my-tickets');
+            }
+            exit();
+        } else {
+            // Handle case where the user is not logged in
+            $_SESSION['err'] = "You must be logged in to comment.";
+            header('Location: /login');
+            exit();
+        }
     } else {
-        $_SESSION['err'] = "Please enter a comment.";
+        // Handle case where the comment text is empty or invalid
+        $_SESSION['err'] = "Please enter a valid comment.";
         header("Location: /comment/{$ticketId}");
         exit();
     }
 }
+
 
 public function viewTicket($id)
 {
